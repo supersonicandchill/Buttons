@@ -4,178 +4,538 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Daily Game Tasks</title>
+<title>Buttons</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 
 <style>
+    :root {
+        --bg: #0d0f14;
+        --panel: #161a24;
+        --border: #2a2f42;
+        --neon-blue: #00d4ff;
+        --neon-green: #00ff88;
+        --neon-red: #ff3355;
+        --neon-purple: #bf5fff;
+        --neon-yellow: #ffe600;
+        --text: #e8eaf0;
+        --text-dim: #6b7280;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background: #1a1c22;
-        color: white;
-        margin: 0;
-        padding: 0;
+        font-family: 'Orbitron', sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    /* Scanline overlay */
+    body::before {
+        content: '';
+        position: fixed;
+        inset: 0;
+        background: repeating-linear-gradient(
+            0deg,
+            transparent,
+            transparent 2px,
+            rgba(0,0,0,0.08) 2px,
+            rgba(0,0,0,0.08) 4px
+        );
+        pointer-events: none;
+        z-index: 999;
     }
 
     /* Header */
-    h2 {
-        margin: 20px 15px 10px;
-        color: #dde1ed;
+    #header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px 20px 10px;
+        position: relative;
     }
 
-    /* XP + Streak */
-    #xpBarContainer {
-        margin: 15px;
-        height: 22px;
-        background: #3a3d47;
-        border-radius: 12px;
-        overflow: hidden;
-    }
-    #xpBar { 
-        height: 100%; 
-        width: 0%; 
-        background: linear-gradient(90deg,#4cd964,#6effb7); 
-        transition: width .3s; 
+    #header h1 {
+        font-family: 'Press Start 2P', monospace;
+        font-size: clamp(1.2rem, 5vw, 2rem);
+        color: var(--neon-blue);
+        text-shadow:
+            0 0 10px var(--neon-blue),
+            0 0 30px rgba(0,212,255,0.5),
+            0 0 60px rgba(0,212,255,0.2);
+        letter-spacing: 4px;
+        animation: flicker 4s infinite;
     }
 
-    #xpLabel, #streakLabel {
-        text-align: center;
-        font-size: .95rem;
+    @keyframes flicker {
+        0%, 95%, 100% { opacity: 1; }
+        96% { opacity: 0.7; }
+        97% { opacity: 1; }
+        98% { opacity: 0.85; }
     }
-    #streakLabel { color: #ffcc66; margin-top: 6px; }
 
-    /* Layout */
+    /* Decorative header line */
+    .header-line {
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+        margin: 0 20px 16px;
+        box-shadow: 0 0 8px var(--neon-blue);
+    }
+
+    /* Task Container */
     #taskContainer {
         display: flex;
         flex-direction: column;
-        gap: 10px;
-        padding: 15px;
+        gap: 12px;
+        padding: 0 16px;
     }
 
     .taskRow {
         display: flex;
-        align-items: center;
-        gap: 10px;
+        align-items: stretch;
+        gap: 8px;
     }
 
+    /* VIDEO GAME STYLE TASK BUTTON */
     .taskButton {
         flex: 1;
-        padding: 16px;
+        padding: 0;
         text-align: center;
-        border-radius: 12px;
-        font-size: 1.1rem;
-        font-weight: 600;
+        border-radius: 6px;
+        font-family: 'Orbitron', sans-serif;
+        font-size: clamp(0.7rem, 2.5vw, 0.95rem);
+        font-weight: 700;
         cursor: pointer;
-        transition: .2s;
+        transition: all 0.12s;
+        border: none;
+        position: relative;
+        overflow: hidden;
+        letter-spacing: 1px;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .taskButton::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 60%);
+        pointer-events: none;
+    }
+
+    .taskButton::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 4px;
+        border-radius: 0 0 6px 6px;
     }
 
     .pending {
-        background: #ff4f4f;
-        box-shadow: 0 4px 10px rgba(255,70,70,.25);
+        background: linear-gradient(180deg, #c0192a 0%, #8b0000 100%);
+        box-shadow:
+            0 6px 0 #5a0000,
+            0 8px 20px rgba(255,30,60,0.35),
+            inset 0 1px 0 rgba(255,255,255,0.15);
+        color: #fff;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.6), 0 0 10px rgba(255,100,100,0.4);
     }
+
+    .pending::after { background: rgba(0,0,0,0.3); }
+
+    .pending:active {
+        box-shadow:
+            0 2px 0 #5a0000,
+            0 3px 10px rgba(255,30,60,0.3),
+            inset 0 2px 4px rgba(0,0,0,0.3);
+        transform: translateY(3px);
+    }
+
     .done {
-        background: #4cd964;
-        box-shadow: 0 4px 10px rgba(90,255,150,.25);
+        background: linear-gradient(180deg, #00b865 0%, #005e33 100%);
+        box-shadow:
+            0 6px 0 #003d21,
+            0 8px 20px rgba(0,255,136,0.25),
+            inset 0 1px 0 rgba(255,255,255,0.15);
+        color: #fff;
+        text-shadow: 0 1px 3px rgba(0,0,0,0.6), 0 0 10px rgba(0,255,100,0.4);
     }
 
+    .done::after { background: rgba(0,0,0,0.25); }
+
+    /* Arrow buttons - video game D-pad style */
     .arrowBtn {
-        background: #2a2d36;
-        border: none;
-        color: white;
-        font-size: 1.4rem;
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
+        background: linear-gradient(180deg, #2a3048 0%, #1a1f30 100%);
+        border: 1px solid var(--border);
+        color: var(--neon-blue);
+        font-size: 1rem;
+        width: 36px;
+        min-height: 60px;
+        border-radius: 6px;
         cursor: pointer;
+        transition: all 0.1s;
+        box-shadow: 0 4px 0 #0a0d15, inset 0 1px 0 rgba(255,255,255,0.07);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: sans-serif;
     }
 
+    .arrowBtn:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 #0a0d15;
+    }
+
+    .arrowBtn:hover {
+        border-color: var(--neon-blue);
+        box-shadow: 0 4px 0 #0a0d15, 0 0 8px rgba(0,212,255,0.3), inset 0 1px 0 rgba(255,255,255,0.07);
+    }
+
+    /* Delete button */
+    .deleteBtn {
+        background: linear-gradient(180deg, #2a1a28 0%, #1a0f18 100%);
+        border: 1px solid #3d1a35;
+        color: var(--neon-purple);
+        font-size: 0.85rem;
+        width: 36px;
+        min-height: 60px;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.1s;
+        box-shadow: 0 4px 0 #0a0008, inset 0 1px 0 rgba(255,255,255,0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .deleteBtn:active {
+        transform: translateY(3px);
+        box-shadow: 0 1px 0 #0a0008;
+    }
+
+    .deleteBtn:hover {
+        border-color: var(--neon-purple);
+        box-shadow: 0 4px 0 #0a0008, 0 0 10px rgba(191,95,255,0.4);
+    }
+
+    /* Add bar */
     #addBar {
         display: flex;
-        padding: 15px;
+        padding: 16px;
         gap: 10px;
+        margin-top: 4px;
     }
-    input {
+
+    #newTaskInput {
         flex: 1;
-        border-radius: 10px;
-        padding: 14px;
-        border: none;
-        font-size: 1rem;
+        border-radius: 6px;
+        padding: 14px 16px;
+        border: 1px solid var(--border);
+        background: var(--panel);
+        font-size: 0.9rem;
+        font-family: 'Orbitron', sans-serif;
+        color: var(--text);
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+        letter-spacing: 0.5px;
     }
-    button {
-        padding: 14px;
-        border-radius: 10px;
+
+    #newTaskInput:focus {
+        border-color: var(--neon-blue);
+        box-shadow: 0 0 12px rgba(0,212,255,0.25);
+    }
+
+    #newTaskInput::placeholder { color: var(--text-dim); }
+
+    #addBtn {
+        padding: 14px 20px;
+        border-radius: 6px;
         border: none;
-        background: #007aff;
+        background: linear-gradient(180deg, #0099cc 0%, #005f80 100%);
         color: white;
-        font-weight: 600;
+        font-weight: 700;
+        font-family: 'Orbitron', sans-serif;
         cursor: pointer;
-        font-size: 1rem;
+        font-size: 0.85rem;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 0 #003347, 0 6px 15px rgba(0,212,255,0.3);
+        transition: all 0.1s;
     }
 
-    /* Pomodoro */
+    #addBtn:active {
+        transform: translateY(4px);
+        box-shadow: 0 1px 0 #003347, 0 2px 8px rgba(0,212,255,0.2);
+    }
+
+    /* Pomodoro tab button */
     #pomodoroTabBtn {
-        margin: 20px auto;
         display: block;
-        background: #835bff;
-        padding: 12px 20px;
-        border-radius: 10px;
-        font-size: 1rem;
+        margin: 4px 16px 20px;
+        width: calc(100% - 32px);
+        background: linear-gradient(180deg, #7b35cc 0%, #4a1a80 100%);
+        color: white;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        padding: 16px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 6px 0 #2a0a50, 0 8px 20px rgba(120,50,220,0.35);
+        transition: all 0.1s;
     }
 
-    #pomodoroPage { display: none; text-align: center; padding: 20px; }
-    #timer { font-size: 3.2rem; margin: 30px 0; }
-    #pomodoroBtns button { width: 100px; margin: 6px; }
+    #pomodoroTabBtn:active {
+        transform: translateY(5px);
+        box-shadow: 0 1px 0 #2a0a50, 0 3px 8px rgba(120,50,220,0.25);
+    }
+
+    /* Pomodoro Page */
+    #pomodoroPage {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: var(--bg);
+        z-index: 100;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 30px;
+    }
+
+    #pomodoroPage.active { display: flex; }
+
+    #pomodoroPage h2 {
+        font-family: 'Press Start 2P', monospace;
+        font-size: clamp(0.9rem, 3.5vw, 1.4rem);
+        color: var(--neon-purple);
+        text-shadow: 0 0 15px var(--neon-purple), 0 0 40px rgba(191,95,255,0.4);
+        margin-bottom: 10px;
+        letter-spacing: 2px;
+    }
+
+    #timer {
+        font-family: 'Press Start 2P', monospace;
+        font-size: clamp(2.5rem, 12vw, 5rem);
+        color: var(--neon-yellow);
+        text-shadow: 0 0 20px var(--neon-yellow), 0 0 60px rgba(255,230,0,0.4);
+        margin: 40px 0;
+        letter-spacing: 4px;
+        transition: color 0.3s, text-shadow 0.3s;
+    }
+
+    #timer.urgent {
+        color: var(--neon-red);
+        text-shadow: 0 0 20px var(--neon-red), 0 0 60px rgba(255,30,60,0.5);
+        animation: pulse 0.5s infinite alternate;
+    }
+
+    @keyframes pulse {
+        from { opacity: 1; }
+        to { opacity: 0.7; }
+    }
+
+    #pomodoroBtns {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    #pomodoroBtns button {
+        width: 110px;
+        padding: 16px 10px;
+        border-radius: 6px;
+        border: none;
+        font-family: 'Orbitron', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.1s;
+    }
+
+    #startBtn {
+        background: linear-gradient(180deg, #00b865 0%, #005e33 100%);
+        color: white;
+        box-shadow: 0 5px 0 #003d21, 0 6px 15px rgba(0,255,136,0.3);
+    }
+    #pauseBtn {
+        background: linear-gradient(180deg, #cc8800 0%, #7a5000 100%);
+        color: white;
+        box-shadow: 0 5px 0 #3d2800, 0 6px 15px rgba(255,180,0,0.25);
+    }
+    #resetBtn {
+        background: linear-gradient(180deg, #2a3048 0%, #1a1f30 100%);
+        color: var(--neon-blue);
+        border: 1px solid var(--border);
+        box-shadow: 0 5px 0 #0a0d15;
+    }
+    #backBtn {
+        background: linear-gradient(180deg, #7b35cc 0%, #4a1a80 100%);
+        color: white;
+        box-shadow: 0 5px 0 #2a0a50, 0 6px 15px rgba(120,50,220,0.3);
+    }
+
+    #pomodoroBtns button:active {
+        transform: translateY(4px);
+        box-shadow: 0 1px 0 #000 !important;
+    }
+
+    /* Tick indicator dot */
+    #tickDot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--neon-yellow);
+        box-shadow: 0 0 10px var(--neon-yellow);
+        margin-bottom: 20px;
+        transition: opacity 0.1s;
+    }
+
+    /* Done flash overlay */
+    #flashOverlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,255,136,0.15);
+        pointer-events: none;
+        opacity: 0;
+        z-index: 200;
+        transition: opacity 0.3s;
+    }
+
+    #flashOverlay.flash { opacity: 1; }
+
+    /* Corner decorations */
+    .corner {
+        position: fixed;
+        width: 30px; height: 30px;
+        pointer-events: none;
+        z-index: 50;
+        opacity: 0.4;
+    }
+    .corner-tl { top: 8px; left: 8px; border-top: 2px solid var(--neon-blue); border-left: 2px solid var(--neon-blue); }
+    .corner-tr { top: 8px; right: 8px; border-top: 2px solid var(--neon-blue); border-right: 2px solid var(--neon-blue); }
+    .corner-bl { bottom: 8px; left: 8px; border-bottom: 2px solid var(--neon-blue); border-left: 2px solid var(--neon-blue); }
+    .corner-br { bottom: 8px; right: 8px; border-bottom: 2px solid var(--neon-blue); border-right: 2px solid var(--neon-blue); }
 </style>
 </head>
 
 <body>
 
-<h2>Daily Tasks</h2>
+<div class="corner corner-tl"></div>
+<div class="corner corner-tr"></div>
+<div class="corner corner-bl"></div>
+<div class="corner corner-br"></div>
+<div id="flashOverlay"></div>
 
-<!-- XP + Streak -->
-<div id="xpBarContainer"><div id="xpBar"></div></div>
-<div id="xpLabel">XP: 0 / 100</div>
-<div id="streakLabel">🔥 Streak: 0 days</div>
+<!-- Header -->
+<div id="header">
+    <h1>BUTTONS</h1>
+</div>
+<div class="header-line"></div>
 
 <!-- Tasks -->
 <div id="taskContainer"></div>
 
 <!-- Add Task -->
 <div id="addBar">
-    <input id="newTaskInput" placeholder="Add new task…">
-    <button onclick="addTask()">Add</button>
+    <input id="newTaskInput" placeholder="NEW BUTTON…" onkeydown="if(event.key==='Enter')addTask()">
+    <button id="addBtn" onclick="addTask()">+ ADD</button>
 </div>
 
 <!-- Pomodoro Button -->
-<button id="pomodoroTabBtn" onclick="openPomodoro()">Pomodoro Timer</button>
+<button id="pomodoroTabBtn" onclick="openPomodoro()">⏱ POMODORO TIMER</button>
 
 <!-- Pomodoro Page -->
 <div id="pomodoroPage">
-    <h2>Pomodoro Timer</h2>
+    <h2>POMODORO</h2>
+    <div id="tickDot"></div>
     <div id="timer">25:00</div>
     <div id="pomodoroBtns">
-        <button onclick="startPomodoro()">Start</button>
-        <button onclick="pausePomodoro()">Pause</button>
-        <button onclick="resetPomodoro()">Reset</button>
-        <button onclick="closePomodoro()">Back</button>
+        <button id="startBtn" onclick="startPomodoro()">▶ START</button>
+        <button id="pauseBtn" onclick="pausePomodoro()">⏸ PAUSE</button>
+        <button id="resetBtn" onclick="resetPomodoro()">↺ RESET</button>
+        <button id="backBtn" onclick="closePomodoro()">← BACK</button>
     </div>
 </div>
 
 <script>
-let data = JSON.parse(localStorage.getItem("gameTasks_v2") || `{
-    "tasks": [],
-    "xp": 0,
-    "streak": 0,
-    "lastCompletionDate": ""
-}`);
+let data = JSON.parse(localStorage.getItem("buttons_v1") || `{"tasks":[]}`);
 
 function save() {
-    localStorage.setItem("gameTasks_v2", JSON.stringify(data));
+    localStorage.setItem("buttons_v1", JSON.stringify(data));
+}
+
+/* AUDIO */
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+
+function getAudioCtx() {
+    if (!audioCtx) audioCtx = new AudioCtx();
+    return audioCtx;
+}
+
+function playTick() {
+    try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(880, ctx.currentTime);
+        gain.gain.setValueAtTime(0.04, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.04);
+    } catch(e) {}
+}
+
+function playTock() {
+    try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(660, ctx.currentTime);
+        gain.gain.setValueAtTime(0.04, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.04);
+    } catch(e) {}
+}
+
+function playDing() {
+    try {
+        const ctx = getAudioCtx();
+        const t = ctx.currentTime;
+
+        // Three ascending tones — classic "level up" ding
+        [523, 659, 784, 1047].forEach((freq, i) => {
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, t + i * 0.12);
+            gain.gain.setValueAtTime(0, t + i * 0.12);
+            gain.gain.linearRampToValueAtTime(0.3, t + i * 0.12 + 0.02);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.12 + 0.4);
+            osc.start(t + i * 0.12);
+            osc.stop(t + i * 0.12 + 0.5);
+        });
+    } catch(e) {}
 }
 
 /* RENDER */
 function render() {
-    updateXP();
-    updateStreakUI();
-
     const container = document.getElementById("taskContainer");
     container.innerHTML = "";
 
@@ -183,30 +543,41 @@ function render() {
         const row = document.createElement("div");
         row.className = "taskRow";
 
+        // Up/down only for pending
         if (!task.done) {
             let upBtn = document.createElement("button");
             upBtn.className = "arrowBtn";
-            upBtn.textContent = "↑";
+            upBtn.innerHTML = "▲";
             upBtn.onclick = () => moveUp(i);
-            row.appendChild(upBtn);
 
             let downBtn = document.createElement("button");
             downBtn.className = "arrowBtn";
-            downBtn.textContent = "↓";
+            downBtn.innerHTML = "▼";
             downBtn.onclick = () => moveDown(i);
+
+            row.appendChild(upBtn);
             row.appendChild(downBtn);
         } else {
-            let spacer1 = document.createElement("div"); spacer1.style.width = "40px";
-            let spacer2 = document.createElement("div"); spacer2.style.width = "40px";
-            row.appendChild(spacer1);
-            row.appendChild(spacer2);
+            // Spacers for done items
+            let s1 = document.createElement("div"); s1.style.cssText = "width:36px;flex-shrink:0;";
+            let s2 = document.createElement("div"); s2.style.cssText = "width:36px;flex-shrink:0;";
+            row.appendChild(s1);
+            row.appendChild(s2);
         }
 
-        const btn = document.createElement("div");
+        const btn = document.createElement("button");
         btn.className = "taskButton " + (task.done ? "done" : "pending");
         btn.textContent = task.done ? "✔ " + task.text : task.text;
         btn.onclick = () => toggleTask(i);
         row.appendChild(btn);
+
+        // Delete (remove) button — always visible
+        const delBtn = document.createElement("button");
+        delBtn.className = "deleteBtn";
+        delBtn.innerHTML = "✕";
+        delBtn.title = "Remove";
+        delBtn.onclick = () => removeTask(i);
+        row.appendChild(delBtn);
 
         container.appendChild(row);
     });
@@ -215,9 +586,8 @@ function render() {
 /* LOGIC */
 function addTask() {
     const input = document.getElementById("newTaskInput");
-    const text = input.value.trim();
+    const text = input.value.trim().toUpperCase();
     if (!text) return;
-
     data.tasks.push({ text, done: false });
     input.value = "";
     save();
@@ -226,101 +596,101 @@ function addTask() {
 
 function toggleTask(i) {
     const task = data.tasks[i];
-    let wasDone = task.done;
+    const wasDone = task.done;
     task.done = !task.done;
 
     if (!wasDone && task.done) {
-        data.xp += 10;
-
-        let today = new Date().toLocaleDateString("en-CA");
-        let yesterday = new Date(Date.now() - 86400000).toLocaleDateString("en-CA");
-
-        if (data.lastCompletionDate === "") data.streak = 1;
-        else if (data.lastCompletionDate === yesterday) data.streak++;
-        else if (data.lastCompletionDate !== today) data.streak = 1;
-
-        data.lastCompletionDate = today;
-
+        // Move to bottom
         const doneTask = data.tasks.splice(i, 1)[0];
         data.tasks.push(doneTask);
+        // Flash
+        const overlay = document.getElementById("flashOverlay");
+        overlay.classList.add("flash");
+        setTimeout(() => overlay.classList.remove("flash"), 300);
     }
 
     save();
     render();
 }
 
-/* MOVE UP/DOWN */
-function moveUp(i) {
-    if (i === 0) return;
-    let temp = data.tasks[i];
-    data.tasks[i] = data.tasks[i - 1];
-    data.tasks[i - 1] = temp;
+function removeTask(i) {
+    data.tasks.splice(i, 1);
     save();
     render();
+}
+
+function moveUp(i) {
+    if (i === 0) return;
+    [data.tasks[i], data.tasks[i-1]] = [data.tasks[i-1], data.tasks[i]];
+    save(); render();
 }
 
 function moveDown(i) {
     if (i === data.tasks.length - 1) return;
-    let temp = data.tasks[i];
-    data.tasks[i] = data.tasks[i + 1];
-    data.tasks[i + 1] = temp;
-    save();
-    render();
-}
-
-/* XP */
-function updateXP() {
-    const xp = data.xp % 100;
-    document.getElementById("xpBar").style.width = xp + "%";
-    document.getElementById("xpLabel").textContent = `XP: ${xp} / 100`;
-}
-
-/* STREAK */
-function updateStreakUI() {
-    document.getElementById("streakLabel").textContent =
-        `🔥 Streak: ${data.streak} days`;
+    [data.tasks[i], data.tasks[i+1]] = [data.tasks[i+1], data.tasks[i]];
+    save(); render();
 }
 
 /* POMODORO */
-let timer;
+let timerInterval;
 let timeLeft = 1500;
+let isRunning = false;
+let tickToggle = false;
 
 function openPomodoro() {
-    document.getElementById("pomodoroPage").style.display = "block";
+    // Unlock audio on first interaction
+    getAudioCtx();
+    document.getElementById("pomodoroPage").classList.add("active");
 }
 function closePomodoro() {
-    document.getElementById("pomodoroPage").style.display = "none";
+    document.getElementById("pomodoroPage").classList.remove("active");
 }
 
 function updateTimerDisplay() {
-    let m = Math.floor(timeLeft / 60);
-    let s = timeLeft % 60;
-    document.getElementById("timer").textContent =
-        `${m}:${s.toString().padStart(2, "0")}`;
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    const timerEl = document.getElementById("timer");
+    timerEl.textContent = `${m}:${s.toString().padStart(2,"0")}`;
+    timerEl.className = timeLeft <= 60 ? "urgent" : "";
 }
 
 function startPomodoro() {
-    if (timer) return;
-    timer = setInterval(() => {
+    if (isRunning) return;
+    getAudioCtx(); // ensure unlocked
+    isRunning = true;
+    timerInterval = setInterval(() => {
         if (timeLeft > 0) {
             timeLeft--;
             updateTimerDisplay();
+
+            // Tick-tock
+            tickToggle = !tickToggle;
+            if (tickToggle) playTick(); else playTock();
+
+            // Pulse the dot
+            const dot = document.getElementById("tickDot");
+            dot.style.opacity = tickToggle ? "1" : "0.2";
+
         } else {
-            clearInterval(timer);
-            timer = null;
+            clearInterval(timerInterval);
+            isRunning = false;
+            playDing();
+            document.getElementById("tickDot").style.opacity = "0";
         }
     }, 1000);
 }
 
 function pausePomodoro() {
-    clearInterval(timer);
-    timer = null;
+    clearInterval(timerInterval);
+    isRunning = false;
+    document.getElementById("tickDot").style.opacity = "0.2";
 }
 
 function resetPomodoro() {
     pausePomodoro();
     timeLeft = 1500;
     updateTimerDisplay();
+    document.getElementById("tickDot").style.opacity = "1";
 }
 
 render();

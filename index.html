@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Buttons</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
- 
+
 <style>
     :root {
         --bg: #0d0f14;
@@ -20,11 +21,11 @@
         --text-dim: #6b7280;
         --tap-target: 54px;
     }
- 
+
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
- 
+
     html, body { height: 100%; overscroll-behavior: none; }
- 
+
     body {
         font-family: 'Orbitron', sans-serif;
         background: var(--bg);
@@ -33,7 +34,7 @@
         overflow-x: hidden;
         padding-bottom: env(safe-area-inset-bottom, 20px);
     }
- 
+
     body::before {
         content: '';
         position: fixed; inset: 0;
@@ -41,7 +42,7 @@
         pointer-events: none;
         z-index: 999;
     }
- 
+
     /* HEADER */
     #header {
         display: flex;
@@ -49,7 +50,7 @@
         justify-content: center;
         padding: 22px 20px 12px;
     }
- 
+
     #header h1 {
         font-family: 'Press Start 2P', monospace;
         font-size: clamp(1.3rem, 7vw, 2rem);
@@ -58,21 +59,21 @@
         letter-spacing: 4px;
         animation: flicker 4s infinite;
     }
- 
+
     @keyframes flicker {
         0%,95%,100% { opacity:1; }
         96% { opacity:.7; }
         97% { opacity:1; }
         98% { opacity:.85; }
     }
- 
+
     .header-line {
         height: 2px;
         background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
         margin: 0 16px 16px;
         box-shadow: 0 0 8px var(--neon-blue);
     }
- 
+
     /* TASKS */
     #taskContainer {
         display: flex;
@@ -80,13 +81,13 @@
         gap: 10px;
         padding: 0 12px;
     }
- 
+
     .taskRow {
         display: flex;
         align-items: stretch;
         gap: 7px;
     }
- 
+
     .taskButton {
         flex: 1;
         padding: 0 10px;
@@ -108,33 +109,33 @@
         word-break: break-word;
         line-height: 1.3;
     }
- 
+
     .taskButton::before {
         content: '';
         position: absolute; inset: 0;
         background: linear-gradient(180deg, rgba(255,255,255,0.13) 0%, transparent 55%);
         pointer-events: none;
     }
- 
+
     .pending {
         background: linear-gradient(180deg, #c0192a 0%, #8b0000 100%);
         box-shadow: 0 5px 0 #5a0000, 0 7px 18px rgba(255,30,60,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
         color: #fff;
         text-shadow: 0 1px 3px rgba(0,0,0,0.6);
     }
- 
+
     .pending:active {
         box-shadow: 0 1px 0 #5a0000, inset 0 2px 4px rgba(0,0,0,0.3);
         transform: translateY(4px);
     }
- 
+
     .done {
         background: linear-gradient(180deg, #00b865 0%, #005e33 100%);
         box-shadow: 0 5px 0 #003d21, 0 7px 18px rgba(0,255,136,0.2), inset 0 1px 0 rgba(255,255,255,0.15);
         color: #fff;
         text-shadow: 0 1px 3px rgba(0,0,0,0.6);
     }
- 
+
     .arrowBtn {
         background: linear-gradient(180deg, #2a3048 0%, #1a1f30 100%);
         border: 1px solid var(--border);
@@ -151,9 +152,9 @@
         align-items: center;
         justify-content: center;
     }
- 
+
     .arrowBtn:active { transform: translateY(3px); box-shadow: 0 1px 0 #0a0d15; }
- 
+
     .deleteBtn {
         background: linear-gradient(180deg, #2a1a28 0%, #1a0f18 100%);
         border: 1px solid #3d1a35;
@@ -170,16 +171,16 @@
         align-items: center;
         justify-content: center;
     }
- 
+
     .deleteBtn:active { transform: translateY(3px); box-shadow: 0 1px 0 #0a0008; }
- 
+
     /* ADD BAR */
     #addBar {
         display: flex;
         padding: 14px 12px;
         gap: 10px;
     }
- 
+
     #newTaskInput {
         flex: 1;
         min-width: 0;
@@ -194,10 +195,10 @@
         transition: border-color 0.2s, box-shadow 0.2s;
         -webkit-appearance: none;
     }
- 
+
     #newTaskInput:focus { border-color: var(--neon-blue); box-shadow: 0 0 12px rgba(0,212,255,0.25); }
     #newTaskInput::placeholder { color: var(--text-dim); font-size: 0.8rem; }
- 
+
     #addBtn {
         flex-shrink: 0;
         padding: 14px 16px;
@@ -214,9 +215,9 @@
         transition: transform 0.1s, box-shadow 0.1s;
         white-space: nowrap;
     }
- 
+
     #addBtn:active { transform: translateY(4px); box-shadow: 0 1px 0 #003347; }
- 
+
     /* POMODORO TAB */
     #pomodoroTabBtn {
         display: block;
@@ -235,9 +236,9 @@
         box-shadow: 0 6px 0 #2a0a50, 0 8px 20px rgba(120,50,220,0.3);
         transition: transform 0.1s, box-shadow 0.1s;
     }
- 
+
     #pomodoroTabBtn:active { transform: translateY(5px); box-shadow: 0 1px 0 #2a0a50; }
- 
+
     /* POMODORO PAGE */
     #pomodoroPage {
         display: none;
@@ -250,9 +251,9 @@
         padding: 30px 20px;
         padding-bottom: max(30px, env(safe-area-inset-bottom));
     }
- 
+
     #pomodoroPage.active { display: flex; }
- 
+
     #pomodoroPage h2 {
         font-family: 'Press Start 2P', monospace;
         font-size: clamp(1rem, 5vw, 1.5rem);
@@ -261,7 +262,7 @@
         margin-bottom: 12px;
         letter-spacing: 2px;
     }
- 
+
     #tickDot {
         width: 14px; height: 14px;
         border-radius: 50%;
@@ -270,7 +271,7 @@
         margin-bottom: 12px;
         transition: opacity 0.15s;
     }
- 
+
     /* Sound toggle pill */
     #soundToggle {
         margin-bottom: 20px;
@@ -289,15 +290,15 @@
         gap: 8px;
         min-height: 44px;
     }
- 
+
     #soundToggle.sound-on {
         border-color: var(--neon-green);
         color: var(--neon-green);
         box-shadow: 0 0 12px rgba(0,255,136,0.25);
     }
- 
+
     #soundToggle .sicon { font-size: 1.1rem; }
- 
+
     #timer {
         font-family: 'Press Start 2P', monospace;
         font-size: clamp(3rem, 17vw, 5.5rem);
@@ -307,15 +308,15 @@
         letter-spacing: 4px;
         transition: color 0.3s, text-shadow 0.3s;
     }
- 
+
     #timer.urgent {
         color: var(--neon-red);
         text-shadow: 0 0 20px var(--neon-red), 0 0 60px rgba(255,30,60,0.5);
         animation: pulse 0.5s infinite alternate;
     }
- 
+
     @keyframes pulse { from { opacity:1; } to { opacity:.65; } }
- 
+
     #pomodoroBtns {
         display: grid;
         grid-template-columns: 1fr 1fr;
@@ -323,7 +324,7 @@
         width: 100%;
         max-width: 320px;
     }
- 
+
     #pomodoroBtns button {
         padding: 18px 10px;
         border-radius: 8px;
@@ -336,14 +337,14 @@
         transition: transform 0.1s, box-shadow 0.1s;
         min-height: 56px;
     }
- 
+
     #pomodoroBtns button:active { transform: translateY(4px) !important; box-shadow: 0 1px 0 #000 !important; }
- 
+
     #startBtn { background: linear-gradient(180deg,#00b865,#005e33); color:#fff; box-shadow:0 5px 0 #003d21; }
     #pauseBtn { background: linear-gradient(180deg,#cc8800,#7a5000); color:#fff; box-shadow:0 5px 0 #3d2800; }
     #resetBtn { background: linear-gradient(180deg,#2a3048,#1a1f30); color:var(--neon-blue); border:1px solid var(--border); box-shadow:0 5px 0 #0a0d15; }
     #backBtn  { background: linear-gradient(180deg,#7b35cc,#4a1a80); color:#fff; box-shadow:0 5px 0 #2a0a50; }
- 
+
     /* Flash overlay */
     #flashOverlay {
         position: fixed; inset: 0;
@@ -353,7 +354,7 @@
         transition: opacity 0.3s;
     }
     #flashOverlay.flash { opacity: 1; }
- 
+
     /* Corners */
     .corner { position:fixed; width:28px; height:28px; pointer-events:none; z-index:50; opacity:.35; }
     .corner-tl { top:8px;    left:8px;  border-top:2px solid var(--neon-blue); border-left:2px solid var(--neon-blue); }
@@ -363,25 +364,25 @@
 </style>
 </head>
 <body>
- 
+
 <div class="corner corner-tl"></div>
 <div class="corner corner-tr"></div>
 <div class="corner corner-bl"></div>
 <div class="corner corner-br"></div>
 <div id="flashOverlay"></div>
- 
+
 <div id="header"><h1>BUTTONS</h1></div>
 <div class="header-line"></div>
- 
+
 <div id="taskContainer"></div>
- 
+
 <div id="addBar">
     <input id="newTaskInput" placeholder="New button…" onkeydown="if(event.key==='Enter')addTask()">
     <button id="addBtn" onclick="addTask()">+ ADD</button>
 </div>
- 
+
 <button id="pomodoroTabBtn" onclick="openPomodoro()">⏱ POMODORO TIMER</button>
- 
+
 <div id="pomodoroPage">
     <h2>POMODORO</h2>
     <div id="tickDot"></div>
@@ -397,23 +398,23 @@
         <button id="backBtn"  onclick="closePomodoro()">← BACK</button>
     </div>
 </div>
- 
+
 <script>
 /* DATA */
 let data = JSON.parse(localStorage.getItem("buttons_v1") || '{"tasks":[]}');
 function save() { localStorage.setItem("buttons_v1", JSON.stringify(data)); }
- 
+
 /* AUDIO */
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
 let soundOn = false;
- 
+
 function getAudioCtx() {
     if (!audioCtx) audioCtx = new AudioCtx();
     if (audioCtx.state === 'suspended') audioCtx.resume();
     return audioCtx;
 }
- 
+
 function toggleSound() {
     soundOn = !soundOn;
     const btn   = document.getElementById("soundToggle");
@@ -430,7 +431,7 @@ function toggleSound() {
         label.textContent = "SOUND OFF";
     }
 }
- 
+
 function playTick() {
     if (!soundOn) return;
     try {
@@ -443,7 +444,7 @@ function playTick() {
         osc.start(t); osc.stop(t + 0.04);
     } catch(e) {}
 }
- 
+
 function playTock() {
     if (!soundOn) return;
     try {
@@ -456,7 +457,7 @@ function playTock() {
         osc.start(t); osc.stop(t + 0.04);
     } catch(e) {}
 }
- 
+
 function playDing() {
     if (!soundOn) return;
     try {
@@ -473,16 +474,16 @@ function playDing() {
         });
     } catch(e) {}
 }
- 
+
 /* RENDER */
 function render() {
     const container = document.getElementById("taskContainer");
     container.innerHTML = "";
- 
+
     data.tasks.forEach((task, i) => {
         const row = document.createElement("div");
         row.className = "taskRow";
- 
+
         if (!task.done) {
             ["▲","▼"].forEach((sym, dir) => {
                 const ab = document.createElement("button");
@@ -498,23 +499,49 @@ function render() {
                 row.appendChild(sp);
             });
         }
- 
+
         const btn = document.createElement("button");
         btn.className = "taskButton " + (task.done ? "done" : "pending");
         btn.textContent = task.done ? "✔ " + task.text : task.text;
         btn.onclick = () => toggleTask(i);
         row.appendChild(btn);
- 
+
         const del = document.createElement("button");
         del.className = "deleteBtn";
         del.innerHTML = "✕";
-        del.onclick = () => removeTask(i);
+        del.dataset.armed = "false";
+
+        function disarmDel() {
+            clearTimeout(del._armTimer);
+            del._armTimer = null;
+            del.dataset.armed = "false";
+            del.innerHTML = "✕";
+            del.style.borderColor = "";
+            del.style.color = "";
+            del.style.boxShadow = "";
+        }
+
+        del.onclick = (e) => {
+            e.stopPropagation();
+            if (del.dataset.armed === "true") {
+                clearTimeout(del._armTimer);
+                removeTask(i);
+            } else {
+                del.dataset.armed = "true";
+                del.innerHTML = "✓";
+                del.style.borderColor = "var(--neon-red)";
+                del.style.color = "var(--neon-red)";
+                del.style.boxShadow = "0 4px 0 #0a0008, 0 0 12px rgba(255,50,80,0.5)";
+                clearTimeout(del._armTimer);
+                del._armTimer = setTimeout(disarmDel, 3000);
+            }
+        };
         row.appendChild(del);
- 
+
         container.appendChild(row);
     });
 }
- 
+
 /* TASK LOGIC */
 function addTask() {
     const input = document.getElementById("newTaskInput");
@@ -524,7 +551,7 @@ function addTask() {
     input.value = "";
     save(); render();
 }
- 
+
 function toggleTask(i) {
     const task = data.tasks[i];
     const wasDone = task.done;
@@ -538,11 +565,11 @@ function toggleTask(i) {
     }
     save(); render();
 }
- 
+
 function removeTask(i) { data.tasks.splice(i, 1); save(); render(); }
 function moveUp(i)   { if (i === 0) return; [data.tasks[i],data.tasks[i-1]] = [data.tasks[i-1],data.tasks[i]]; save(); render(); }
 function moveDown(i) { if (i === data.tasks.length-1) return; [data.tasks[i],data.tasks[i+1]] = [data.tasks[i+1],data.tasks[i]]; save(); render(); }
- 
+
 /* ── POMODORO — wall-clock timer survives screen-off ── */
 const DURATION = 1500; // 25 min
 let timeLeft       = DURATION;
@@ -551,10 +578,10 @@ let startEpoch     = null;  // Date.now() when current run started
 let elapsedAtPause = 0;     // seconds accumulated before current run
 let tickToggle     = false;
 let tickInterval   = null;
- 
+
 function openPomodoro()  { document.getElementById("pomodoroPage").classList.add("active"); }
 function closePomodoro() { document.getElementById("pomodoroPage").classList.remove("active"); }
- 
+
 function updateTimerDisplay() {
     const m  = Math.floor(timeLeft / 60);
     const s  = timeLeft % 60;
@@ -562,24 +589,24 @@ function updateTimerDisplay() {
     el.textContent = `${m}:${s.toString().padStart(2,"0")}`;
     el.className   = (timeLeft <= 60 && isRunning) ? "urgent" : "";
 }
- 
+
 function computeTimeLeft() {
     if (!isRunning) return timeLeft;
     const totalElapsed = elapsedAtPause + Math.floor((Date.now() - startEpoch) / 1000);
     return Math.max(0, DURATION - totalElapsed);
 }
- 
+
 function startTick() {
     if (tickInterval) return;
     tickInterval = setInterval(() => {
         if (!isRunning) return;
         timeLeft = computeTimeLeft();
         updateTimerDisplay();
- 
+
         tickToggle = !tickToggle;
         if (tickToggle) playTick(); else playTock();
         document.getElementById("tickDot").style.opacity = tickToggle ? "1" : "0.2";
- 
+
         if (timeLeft <= 0) {
             clearInterval(tickInterval); tickInterval = null;
             isRunning = false;
@@ -589,7 +616,7 @@ function startTick() {
         }
     }, 1000);
 }
- 
+
 function startPomodoro() {
     if (isRunning) return;
     if (soundOn) getAudioCtx();
@@ -597,7 +624,7 @@ function startPomodoro() {
     startEpoch = Date.now();
     startTick();
 }
- 
+
 function pausePomodoro() {
     if (!isRunning) return;
     elapsedAtPause += Math.floor((Date.now() - startEpoch) / 1000);
@@ -606,16 +633,19 @@ function pausePomodoro() {
     document.getElementById("tickDot").style.opacity = "0.2";
     document.getElementById("timer").className = "";
 }
- 
+
 function resetPomodoro() {
-    pausePomodoro();
+    // Directly stop everything regardless of isRunning state
+    clearInterval(tickInterval); tickInterval = null;
+    isRunning      = false;
     elapsedAtPause = 0;
     startEpoch     = null;
     timeLeft       = DURATION;
     updateTimerDisplay();
     document.getElementById("tickDot").style.opacity = "1";
+    document.getElementById("timer").className = "";
 }
- 
+
 /* Screen-off / tab-switch recovery */
 document.addEventListener("visibilitychange", () => {
     if (!document.hidden && isRunning) {
@@ -629,7 +659,7 @@ document.addEventListener("visibilitychange", () => {
         }
     }
 });
- 
+
 /* Init */
 render();
 updateTimerDisplay();

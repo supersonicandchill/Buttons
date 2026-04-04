@@ -6,361 +6,75 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Buttons</title>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-
 <style>
-    :root {
-        --bg: #0d0f14;
-        --panel: #161a24;
-        --border: #2a2f42;
-        --neon-blue: #00d4ff;
-        --neon-green: #00ff88;
-        --neon-red: #ff3355;
-        --neon-purple: #bf5fff;
-        --neon-yellow: #ffe600;
-        --text: #e8eaf0;
-        --text-dim: #6b7280;
-        --tap-target: 54px;
-    }
+:root {
+    --bg:#0d0f14; --panel:#161a24; --border:#2a2f42;
+    --neon-blue:#00d4ff; --neon-green:#00ff88; --neon-red:#ff3355;
+    --neon-purple:#bf5fff; --neon-yellow:#ffe600; --neon-orange:#ff8c00;
+    --text:#e8eaf0; --text-dim:#6b7280; --tap-target:54px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{height:100%;overscroll-behavior:none;}
+body{font-family:'Orbitron',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom,20px);}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:999;}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+#header{display:flex;align-items:center;justify-content:center;padding:22px 20px 12px;}
+#header h1{font-family:'Press Start 2P',monospace;font-size:clamp(1.3rem,7vw,2rem);color:var(--neon-blue);text-shadow:0 0 10px var(--neon-blue),0 0 30px rgba(0,212,255,0.5),0 0 60px rgba(0,212,255,0.2);letter-spacing:4px;animation:flicker 4s infinite;}
+@keyframes flicker{0%,95%,100%{opacity:1;}96%{opacity:.7;}97%{opacity:1;}98%{opacity:.85;}}
 
-    html, body { height: 100%; overscroll-behavior: none; }
+.header-line{height:2px;background:linear-gradient(90deg,transparent,var(--neon-blue),transparent);margin:0 16px 10px;box-shadow:0 0 8px var(--neon-blue);}
 
-    body {
-        font-family: 'Orbitron', sans-serif;
-        background: var(--bg);
-        color: var(--text);
-        min-height: 100vh;
-        overflow-x: hidden;
-        padding-bottom: env(safe-area-inset-bottom, 20px);
-    }
+#streakBar{display:flex;align-items:center;gap:10px;padding:0 16px 14px;}
+#streakLabel{font-size:0.65rem;color:var(--neon-yellow);text-shadow:0 0 8px rgba(255,230,0,0.5);white-space:nowrap;letter-spacing:0.5px;min-width:70px;}
+#streakTrack{flex:1;height:10px;background:#1e2230;border-radius:5px;overflow:hidden;border:1px solid #2a2f42;}
+#streakFill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--neon-yellow),var(--neon-orange));box-shadow:0 0 8px rgba(255,180,0,0.5);transition:width 0.5s cubic-bezier(0.34,1.56,0.64,1);width:0%;}
 
-    body::before {
-        content: '';
-        position: fixed; inset: 0;
-        background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
-        pointer-events: none;
-        z-index: 999;
-    }
+#taskContainer{display:flex;flex-direction:column;gap:10px;padding:0 12px;}
+.taskRow{display:flex;align-items:stretch;gap:7px;}
 
-    /* HEADER */
-    #header {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 22px 20px 12px;
-    }
+.taskButton{flex:1;padding:0 10px;text-align:center;border-radius:8px;font-family:'Orbitron',sans-serif;font-size:clamp(0.65rem,3.5vw,0.9rem);font-weight:700;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s;border:none;position:relative;overflow:hidden;letter-spacing:0.5px;min-height:var(--tap-target);display:flex;align-items:center;justify-content:center;word-break:break-word;line-height:1.3;}
+.taskButton::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.13) 0%,transparent 55%);pointer-events:none;}
+.pending{background:linear-gradient(180deg,#c0192a 0%,#8b0000 100%);box-shadow:0 5px 0 #5a0000,0 7px 18px rgba(255,30,60,0.3),inset 0 1px 0 rgba(255,255,255,0.15);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.6);}
+.pending:active{box-shadow:0 1px 0 #5a0000,inset 0 2px 4px rgba(0,0,0,0.3);transform:translateY(4px);}
+.done{background:linear-gradient(180deg,#00b865 0%,#005e33 100%);box-shadow:0 5px 0 #003d21,0 7px 18px rgba(0,255,136,0.2),inset 0 1px 0 rgba(255,255,255,0.15);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.6);}
 
-    #header h1 {
-        font-family: 'Press Start 2P', monospace;
-        font-size: clamp(1.3rem, 7vw, 2rem);
-        color: var(--neon-blue);
-        text-shadow: 0 0 10px var(--neon-blue), 0 0 30px rgba(0,212,255,0.5), 0 0 60px rgba(0,212,255,0.2);
-        letter-spacing: 4px;
-        animation: flicker 4s infinite;
-    }
+.arrowBtn{background:linear-gradient(180deg,#2a3048 0%,#1a1f30 100%);border:1px solid var(--border);color:var(--neon-blue);font-size:0.9rem;width:40px;flex-shrink:0;min-height:var(--tap-target);border-radius:8px;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s;box-shadow:0 4px 0 #0a0d15;display:flex;align-items:center;justify-content:center;}
+.arrowBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #0a0d15;}
+.deleteBtn{background:linear-gradient(180deg,#2a1a28 0%,#1a0f18 100%);border:1px solid #3d1a35;color:var(--neon-purple);font-size:1rem;width:40px;flex-shrink:0;min-height:var(--tap-target);border-radius:8px;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s;box-shadow:0 4px 0 #0a0008;display:flex;align-items:center;justify-content:center;}
+.deleteBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #0a0008;}
 
-    @keyframes flicker {
-        0%,95%,100% { opacity:1; }
-        96% { opacity:.7; }
-        97% { opacity:1; }
-        98% { opacity:.85; }
-    }
+#addBar{display:flex;padding:14px 12px;gap:10px;}
+#newTaskInput{flex:1;min-width:0;border-radius:8px;padding:14px;border:1px solid var(--border);background:var(--panel);font-size:1rem;font-family:'Orbitron',sans-serif;color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;-webkit-appearance:none;}
+#newTaskInput:focus{border-color:var(--neon-blue);box-shadow:0 0 12px rgba(0,212,255,0.25);}
+#newTaskInput::placeholder{color:var(--text-dim);font-size:0.8rem;}
+#addBtn{flex-shrink:0;padding:14px 16px;border-radius:8px;border:none;background:linear-gradient(180deg,#0099cc 0%,#005f80 100%);color:white;font-weight:700;font-family:'Orbitron',sans-serif;cursor:pointer;font-size:0.8rem;letter-spacing:0.5px;box-shadow:0 5px 0 #003347,0 6px 15px rgba(0,212,255,0.25);transition:transform 0.1s,box-shadow 0.1s;white-space:nowrap;}
+#addBtn:active{transform:translateY(4px);box-shadow:0 1px 0 #003347;}
 
-    .header-line {
-        height: 2px;
-        background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
-        margin: 0 16px 16px;
-        box-shadow: 0 0 8px var(--neon-blue);
-    }
+#clearDoneBtn{display:none;margin:0 12px 4px;width:calc(100% - 24px);background:linear-gradient(180deg,#2a1a28 0%,#1a0f18 100%);color:var(--neon-purple);font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:1px;padding:14px;border-radius:8px;border:1px solid #3d1a35;cursor:pointer;box-shadow:0 5px 0 #0a0008;transition:transform 0.1s,box-shadow 0.1s,color 0.2s,border-color 0.2s;}
+#clearDoneBtn:active{transform:translateY(4px);box-shadow:0 1px 0 #0a0008;}
+#clearDoneBtn.armed{border-color:var(--neon-red);color:var(--neon-red);box-shadow:0 5px 0 #0a0008,0 0 14px rgba(255,50,80,0.4);}
+#clearDoneBtn.visible{display:block;}
 
-    /* TASKS */
-    #taskContainer {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-        padding: 0 12px;
-    }
+#toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel);border:1px solid var(--neon-green);color:var(--neon-green);font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;padding:12px 22px;border-radius:30px;box-shadow:0 0 20px rgba(0,255,136,0.3);letter-spacing:1px;white-space:nowrap;opacity:0;pointer-events:none;z-index:500;transition:opacity 0.25s,transform 0.25s;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-    .taskRow {
-        display: flex;
-        align-items: stretch;
-        gap: 7px;
-    }
+#allClearOverlay{position:fixed;inset:0;background:rgba(0,10,5,0.93);z-index:600;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;}
+#allClearOverlay.show{display:flex;}
+#allClearOverlay .big-emoji{font-size:4rem;margin-bottom:20px;animation:bounce 0.6s infinite alternate;}
+@keyframes bounce{from{transform:translateY(0);}to{transform:translateY(-12px);}}
+#allClearOverlay h2{font-family:'Press Start 2P',monospace;font-size:clamp(1rem,5vw,1.6rem);color:var(--neon-green);text-shadow:0 0 20px var(--neon-green),0 0 50px rgba(0,255,136,0.4);margin-bottom:16px;letter-spacing:2px;line-height:1.6;}
+#allClearOverlay p{font-size:0.8rem;color:var(--text-dim);margin-bottom:32px;letter-spacing:1px;line-height:1.8;max-width:300px;}
+#allClearDismiss{background:linear-gradient(180deg,#00b865,#005e33);border:none;color:white;font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;padding:18px 32px;border-radius:8px;cursor:pointer;box-shadow:0 5px 0 #003d21;letter-spacing:1px;transition:transform 0.1s,box-shadow 0.1s;}
+#allClearDismiss:active{transform:translateY(4px);box-shadow:0 1px 0 #003d21;}
 
-    .taskButton {
-        flex: 1;
-        padding: 0 10px;
-        text-align: center;
-        border-radius: 8px;
-        font-family: 'Orbitron', sans-serif;
-        font-size: clamp(0.65rem, 3.5vw, 0.9rem);
-        font-weight: 700;
-        cursor: pointer;
-        transition: transform 0.1s, box-shadow 0.1s;
-        border: none;
-        position: relative;
-        overflow: hidden;
-        letter-spacing: 0.5px;
-        min-height: var(--tap-target);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        word-break: break-word;
-        line-height: 1.3;
-    }
+#flashOverlay{position:fixed;inset:0;background:rgba(0,255,136,0.15);pointer-events:none;opacity:0;z-index:200;transition:opacity 0.3s;}
+#flashOverlay.flash{opacity:1;}
 
-    .taskButton::before {
-        content: '';
-        position: absolute; inset: 0;
-        background: linear-gradient(180deg, rgba(255,255,255,0.13) 0%, transparent 55%);
-        pointer-events: none;
-    }
-
-    .pending {
-        background: linear-gradient(180deg, #c0192a 0%, #8b0000 100%);
-        box-shadow: 0 5px 0 #5a0000, 0 7px 18px rgba(255,30,60,0.3), inset 0 1px 0 rgba(255,255,255,0.15);
-        color: #fff;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-    }
-
-    .pending:active {
-        box-shadow: 0 1px 0 #5a0000, inset 0 2px 4px rgba(0,0,0,0.3);
-        transform: translateY(4px);
-    }
-
-    .done {
-        background: linear-gradient(180deg, #00b865 0%, #005e33 100%);
-        box-shadow: 0 5px 0 #003d21, 0 7px 18px rgba(0,255,136,0.2), inset 0 1px 0 rgba(255,255,255,0.15);
-        color: #fff;
-        text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-    }
-
-    .arrowBtn {
-        background: linear-gradient(180deg, #2a3048 0%, #1a1f30 100%);
-        border: 1px solid var(--border);
-        color: var(--neon-blue);
-        font-size: 0.9rem;
-        width: 40px;
-        flex-shrink: 0;
-        min-height: var(--tap-target);
-        border-radius: 8px;
-        cursor: pointer;
-        transition: transform 0.1s, box-shadow 0.1s;
-        box-shadow: 0 4px 0 #0a0d15;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .arrowBtn:active { transform: translateY(3px); box-shadow: 0 1px 0 #0a0d15; }
-
-    .deleteBtn {
-        background: linear-gradient(180deg, #2a1a28 0%, #1a0f18 100%);
-        border: 1px solid #3d1a35;
-        color: var(--neon-purple);
-        font-size: 1rem;
-        width: 40px;
-        flex-shrink: 0;
-        min-height: var(--tap-target);
-        border-radius: 8px;
-        cursor: pointer;
-        transition: transform 0.1s, box-shadow 0.1s;
-        box-shadow: 0 4px 0 #0a0008;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .deleteBtn:active { transform: translateY(3px); box-shadow: 0 1px 0 #0a0008; }
-
-    /* ADD BAR */
-    #addBar {
-        display: flex;
-        padding: 14px 12px;
-        gap: 10px;
-    }
-
-    #newTaskInput {
-        flex: 1;
-        min-width: 0;
-        border-radius: 8px;
-        padding: 14px;
-        border: 1px solid var(--border);
-        background: var(--panel);
-        font-size: 1rem;
-        font-family: 'Orbitron', sans-serif;
-        color: var(--text);
-        outline: none;
-        transition: border-color 0.2s, box-shadow 0.2s;
-        -webkit-appearance: none;
-    }
-
-    #newTaskInput:focus { border-color: var(--neon-blue); box-shadow: 0 0 12px rgba(0,212,255,0.25); }
-    #newTaskInput::placeholder { color: var(--text-dim); font-size: 0.8rem; }
-
-    #addBtn {
-        flex-shrink: 0;
-        padding: 14px 16px;
-        border-radius: 8px;
-        border: none;
-        background: linear-gradient(180deg, #0099cc 0%, #005f80 100%);
-        color: white;
-        font-weight: 700;
-        font-family: 'Orbitron', sans-serif;
-        cursor: pointer;
-        font-size: 0.8rem;
-        letter-spacing: 0.5px;
-        box-shadow: 0 5px 0 #003347, 0 6px 15px rgba(0,212,255,0.25);
-        transition: transform 0.1s, box-shadow 0.1s;
-        white-space: nowrap;
-    }
-
-    #addBtn:active { transform: translateY(4px); box-shadow: 0 1px 0 #003347; }
-
-    /* POMODORO TAB */
-    #pomodoroTabBtn {
-        display: block;
-        margin: 0 12px 28px;
-        width: calc(100% - 24px);
-        background: linear-gradient(180deg, #7b35cc 0%, #4a1a80 100%);
-        color: white;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 0.85rem;
-        font-weight: 700;
-        letter-spacing: 1px;
-        padding: 18px;
-        border-radius: 8px;
-        border: none;
-        cursor: pointer;
-        box-shadow: 0 6px 0 #2a0a50, 0 8px 20px rgba(120,50,220,0.3);
-        transition: transform 0.1s, box-shadow 0.1s;
-    }
-
-    #pomodoroTabBtn:active { transform: translateY(5px); box-shadow: 0 1px 0 #2a0a50; }
-
-    /* POMODORO PAGE */
-    #pomodoroPage {
-        display: none;
-        position: fixed; inset: 0;
-        background: var(--bg);
-        z-index: 100;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        padding: 30px 20px;
-        padding-bottom: max(30px, env(safe-area-inset-bottom));
-    }
-
-    #pomodoroPage.active { display: flex; }
-
-    #pomodoroPage h2 {
-        font-family: 'Press Start 2P', monospace;
-        font-size: clamp(1rem, 5vw, 1.5rem);
-        color: var(--neon-purple);
-        text-shadow: 0 0 15px var(--neon-purple), 0 0 40px rgba(191,95,255,0.4);
-        margin-bottom: 12px;
-        letter-spacing: 2px;
-    }
-
-    #tickDot {
-        width: 14px; height: 14px;
-        border-radius: 50%;
-        background: var(--neon-yellow);
-        box-shadow: 0 0 12px var(--neon-yellow);
-        margin-bottom: 12px;
-        transition: opacity 0.15s;
-    }
-
-    /* Sound toggle pill */
-    #soundToggle {
-        margin-bottom: 20px;
-        background: var(--panel);
-        border: 1px solid var(--border);
-        color: var(--text-dim);
-        font-family: 'Orbitron', sans-serif;
-        font-size: 0.7rem;
-        padding: 10px 20px;
-        border-radius: 30px;
-        cursor: pointer;
-        letter-spacing: 1px;
-        transition: all 0.2s;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        min-height: 44px;
-    }
-
-    #soundToggle.sound-on {
-        border-color: var(--neon-green);
-        color: var(--neon-green);
-        box-shadow: 0 0 12px rgba(0,255,136,0.25);
-    }
-
-    #soundToggle .sicon { font-size: 1.1rem; }
-
-    #timer {
-        font-family: 'Press Start 2P', monospace;
-        font-size: clamp(3rem, 17vw, 5.5rem);
-        color: var(--neon-yellow);
-        text-shadow: 0 0 20px var(--neon-yellow), 0 0 60px rgba(255,230,0,0.35);
-        margin: 24px 0;
-        letter-spacing: 4px;
-        transition: color 0.3s, text-shadow 0.3s;
-    }
-
-    #timer.urgent {
-        color: var(--neon-red);
-        text-shadow: 0 0 20px var(--neon-red), 0 0 60px rgba(255,30,60,0.5);
-        animation: pulse 0.5s infinite alternate;
-    }
-
-    @keyframes pulse { from { opacity:1; } to { opacity:.65; } }
-
-    #pomodoroBtns {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 12px;
-        width: 100%;
-        max-width: 320px;
-    }
-
-    #pomodoroBtns button {
-        padding: 18px 10px;
-        border-radius: 8px;
-        border: none;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 0.75rem;
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        cursor: pointer;
-        transition: transform 0.1s, box-shadow 0.1s;
-        min-height: 56px;
-    }
-
-    #pomodoroBtns button:active { transform: translateY(4px) !important; box-shadow: 0 1px 0 #000 !important; }
-
-    #startBtn { background: linear-gradient(180deg,#00b865,#005e33); color:#fff; box-shadow:0 5px 0 #003d21; }
-    #pauseBtn { background: linear-gradient(180deg,#cc8800,#7a5000); color:#fff; box-shadow:0 5px 0 #3d2800; }
-    #resetBtn { background: linear-gradient(180deg,#2a3048,#1a1f30); color:var(--neon-blue); border:1px solid var(--border); box-shadow:0 5px 0 #0a0d15; }
-    #backBtn  { background: linear-gradient(180deg,#7b35cc,#4a1a80); color:#fff; box-shadow:0 5px 0 #2a0a50; }
-
-    /* Flash overlay */
-    #flashOverlay {
-        position: fixed; inset: 0;
-        background: rgba(0,255,136,0.15);
-        pointer-events: none;
-        opacity: 0; z-index: 200;
-        transition: opacity 0.3s;
-    }
-    #flashOverlay.flash { opacity: 1; }
-
-    /* Corners */
-    .corner { position:fixed; width:28px; height:28px; pointer-events:none; z-index:50; opacity:.35; }
-    .corner-tl { top:8px;    left:8px;  border-top:2px solid var(--neon-blue); border-left:2px solid var(--neon-blue); }
-    .corner-tr { top:8px;    right:8px; border-top:2px solid var(--neon-blue); border-right:2px solid var(--neon-blue); }
-    .corner-bl { bottom:8px; left:8px;  border-bottom:2px solid var(--neon-blue); border-left:2px solid var(--neon-blue); }
-    .corner-br { bottom:8px; right:8px; border-bottom:2px solid var(--neon-blue); border-right:2px solid var(--neon-blue); }
+.corner{position:fixed;width:28px;height:28px;pointer-events:none;z-index:50;opacity:.35;}
+.corner-tl{top:8px;left:8px;border-top:2px solid var(--neon-blue);border-left:2px solid var(--neon-blue);}
+.corner-tr{top:8px;right:8px;border-top:2px solid var(--neon-blue);border-right:2px solid var(--neon-blue);}
+.corner-bl{bottom:8px;left:8px;border-bottom:2px solid var(--neon-blue);border-left:2px solid var(--neon-blue);}
+.corner-br{bottom:8px;right:8px;border-bottom:2px solid var(--neon-blue);border-right:2px solid var(--neon-blue);}
 </style>
 </head>
 <body>
@@ -370,115 +84,128 @@
 <div class="corner corner-bl"></div>
 <div class="corner corner-br"></div>
 <div id="flashOverlay"></div>
+<div id="toast"></div>
+
+<div id="allClearOverlay">
+    <div class="big-emoji">🏆</div>
+    <h2>ALL CLEAR!</h2>
+    <p id="allClearMsg"></p>
+    <button id="allClearDismiss" onclick="dismissAllClear()">KEEP CRUSHING IT</button>
+</div>
 
 <div id="header"><h1>BUTTONS</h1></div>
 <div class="header-line"></div>
 
+<div id="streakBar">
+    <div id="streakLabel">🔥 0 days</div>
+    <div id="streakTrack"><div id="streakFill"></div></div>
+</div>
+
 <div id="taskContainer"></div>
+
+<button id="clearDoneBtn" onclick="clearDoneClick()">✕ CLEAR DONE</button>
 
 <div id="addBar">
     <input id="newTaskInput" placeholder="New button…" onkeydown="if(event.key==='Enter')addTask()">
     <button id="addBtn" onclick="addTask()">+ ADD</button>
 </div>
 
-<button id="pomodoroTabBtn" onclick="openPomodoro()">⏱ POMODORO TIMER</button>
-
-<div id="pomodoroPage">
-    <h2>POMODORO</h2>
-    <div id="tickDot"></div>
-    <button id="soundToggle" onclick="toggleSound()">
-        <span class="sicon">🔇</span>
-        <span id="soundLabel">SOUND OFF</span>
-    </button>
-    <div id="timer">25:00</div>
-    <div id="pomodoroBtns">
-        <button id="startBtn" onclick="startPomodoro()">▶ START</button>
-        <button id="pauseBtn" onclick="pausePomodoro()">⏸ PAUSE</button>
-        <button id="resetBtn" onclick="resetPomodoro()">↺ RESET</button>
-        <button id="backBtn"  onclick="closePomodoro()">← BACK</button>
-    </div>
-</div>
-
 <script>
-/* DATA */
-let data = JSON.parse(localStorage.getItem("buttons_v1") || '{"tasks":[]}');
-function save() { localStorage.setItem("buttons_v1", JSON.stringify(data)); }
+/* ── DATA ── */
+function loadData() {
+    const v2 = localStorage.getItem("buttons_v2");
+    if (v2) return JSON.parse(v2);
+    const v1 = localStorage.getItem("buttons_v1");
+    if (v1) { const old = JSON.parse(v1); return { tasks: old.tasks || [], streak: 0, lastDate: "" }; }
+    return { tasks: [], streak: 0, lastDate: "" };
+}
+let data = loadData();
+function save() { localStorage.setItem("buttons_v2", JSON.stringify(data)); }
 
-/* AUDIO */
-const AudioCtx = window.AudioContext || window.webkitAudioContext;
-let audioCtx;
-let soundOn = false;
+/* ── STREAK ── */
+function todayStr() { return new Date().toLocaleDateString("en-CA"); }
 
-function getAudioCtx() {
-    if (!audioCtx) audioCtx = new AudioCtx();
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    return audioCtx;
+function updateStreakUI() {
+    const s = data.streak || 0;
+    document.getElementById("streakLabel").textContent = "🔥 " + s + " day" + (s === 1 ? "" : "s");
+    document.getElementById("streakFill").style.width = Math.min(100, (s / 30) * 100) + "%";
 }
 
-function toggleSound() {
-    soundOn = !soundOn;
-    const btn   = document.getElementById("soundToggle");
-    const icon  = btn.querySelector(".sicon");
-    const label = document.getElementById("soundLabel");
-    if (soundOn) {
-        btn.classList.add("sound-on");
-        icon.textContent  = "🔊";
-        label.textContent = "SOUND ON";
-        getAudioCtx(); // must unlock on user gesture
-    } else {
-        btn.classList.remove("sound-on");
-        icon.textContent  = "🔇";
-        label.textContent = "SOUND OFF";
-    }
+function bumpStreak() {
+    const today     = todayStr();
+    const yesterday = new Date(Date.now() - 86400000).toLocaleDateString("en-CA");
+    if (data.lastDate === today) return;
+    data.streak = (data.lastDate === yesterday) ? (data.streak || 0) + 1 : 1;
+    data.lastDate = today;
+    save();
+    updateStreakUI();
 }
 
-function playTick() {
-    if (!soundOn) return;
-    try {
-        const ctx = getAudioCtx(), t = ctx.currentTime;
-        const osc = ctx.createOscillator(), g = ctx.createGain();
-        osc.connect(g); g.connect(ctx.destination);
-        osc.type = 'square'; osc.frequency.setValueAtTime(880, t);
-        g.gain.setValueAtTime(0.04, t);
-        g.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
-        osc.start(t); osc.stop(t + 0.04);
-    } catch(e) {}
+/* ── TOAST ── */
+const TASK_MSGS = [
+    "BOOM. Button pressed. 💥",
+    "Look at you go! 🚀",
+    "That one didn't stand a chance.",
+    "DESTROYED IT. 🔥",
+    "Button obliterated. Nice work.",
+    "They said it couldn't be done. They were wrong.",
+    "One small tap for you, one giant leap. 🌕",
+    "Your future self says thanks.",
+    "Scientists confirm: that was impressive.",
+    "Achievement unlocked: Got stuff done. 🏅",
+    "You absolute machine. 🤖",
+    "That button never saw it coming.",
+    "Task terminated. Proceed. ⚡",
+    "Productivity level: dangerous.",
+    "I'm not crying, you're crying. 😭"
+];
+
+const ALL_CLEAR_MSGS = [
+    "Every single button pressed. You are a legend. Go touch grass. 🌿",
+    "Zero buttons remaining. Maximum productivity achieved. The simulation is impressed. 🤖",
+    "You cleared the board. Firefighter. Author. Baseball coach. Button destroyer. 💪",
+    "FLAWLESS VICTORY. All tasks annihilated. You may now eat a snack.",
+    "List: defeated. You: victorious. The buttons never had a chance. 🏆"
+];
+
+let toastTimer = null;
+function showToast(msg) {
+    const el = document.getElementById("toast");
+    clearTimeout(toastTimer);
+    el.textContent = msg;
+    el.classList.add("show");
+    toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
 }
 
-function playTock() {
-    if (!soundOn) return;
-    try {
-        const ctx = getAudioCtx(), t = ctx.currentTime;
-        const osc = ctx.createOscillator(), g = ctx.createGain();
-        osc.connect(g); g.connect(ctx.destination);
-        osc.type = 'square'; osc.frequency.setValueAtTime(660, t);
-        g.gain.setValueAtTime(0.04, t);
-        g.gain.exponentialRampToValueAtTime(0.001, t + 0.04);
-        osc.start(t); osc.stop(t + 0.04);
-    } catch(e) {}
+function checkAllClear() {
+    if (!data.tasks.length) return;
+    if (!data.tasks.every(t => t.done)) return;
+    setTimeout(() => {
+        document.getElementById("allClearMsg").textContent =
+            ALL_CLEAR_MSGS[Math.floor(Math.random() * ALL_CLEAR_MSGS.length)];
+        document.getElementById("allClearOverlay").classList.add("show");
+    }, 600);
 }
 
-function playDing() {
-    if (!soundOn) return;
-    try {
-        const ctx = getAudioCtx(), t = ctx.currentTime;
-        [523, 659, 784, 1047].forEach((freq, i) => {
-            const osc = ctx.createOscillator(), g = ctx.createGain();
-            osc.connect(g); g.connect(ctx.destination);
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(freq, t + i * 0.12);
-            g.gain.setValueAtTime(0, t + i * 0.12);
-            g.gain.linearRampToValueAtTime(0.3, t + i * 0.12 + 0.02);
-            g.gain.exponentialRampToValueAtTime(0.001, t + i * 0.12 + 0.4);
-            osc.start(t + i * 0.12); osc.stop(t + i * 0.12 + 0.5);
-        });
-    } catch(e) {}
+function dismissAllClear() {
+    document.getElementById("allClearOverlay").classList.remove("show");
 }
 
-/* RENDER */
+/* ── RENDER ── */
 function render() {
+    updateStreakUI();
     const container = document.getElementById("taskContainer");
     container.innerHTML = "";
+
+    const hasDone = data.tasks.some(t => t.done);
+    const clearBtn = document.getElementById("clearDoneBtn");
+    clearBtn.classList.toggle("visible", hasDone);
+    if (!hasDone && clearDoneArmed) {
+        clearTimeout(clearDoneTimer);
+        clearDoneArmed = false;
+        clearBtn.classList.remove("armed");
+        clearBtn.textContent = "✕ CLEAR DONE";
+    }
 
     data.tasks.forEach((task, i) => {
         const row = document.createElement("div");
@@ -487,8 +214,7 @@ function render() {
         if (!task.done) {
             ["▲","▼"].forEach((sym, dir) => {
                 const ab = document.createElement("button");
-                ab.className = "arrowBtn";
-                ab.innerHTML = sym;
+                ab.className = "arrowBtn"; ab.innerHTML = sym;
                 ab.onclick = () => dir === 0 ? moveUp(i) : moveDown(i);
                 row.appendChild(ab);
             });
@@ -507,18 +233,12 @@ function render() {
         row.appendChild(btn);
 
         const del = document.createElement("button");
-        del.className = "deleteBtn";
-        del.innerHTML = "✕";
-        del.dataset.armed = "false";
+        del.className = "deleteBtn"; del.innerHTML = "✕"; del.dataset.armed = "false";
 
         function disarmDel() {
-            clearTimeout(del._armTimer);
-            del._armTimer = null;
-            del.dataset.armed = "false";
-            del.innerHTML = "✕";
-            del.style.borderColor = "";
-            del.style.color = "";
-            del.style.boxShadow = "";
+            clearTimeout(del._armTimer); del._armTimer = null;
+            del.dataset.armed = "false"; del.innerHTML = "✕";
+            del.style.borderColor = ""; del.style.color = ""; del.style.boxShadow = "";
         }
 
         del.onclick = (e) => {
@@ -527,142 +247,74 @@ function render() {
                 clearTimeout(del._armTimer);
                 removeTask(i);
             } else {
-                del.dataset.armed = "true";
-                del.innerHTML = "✓";
+                del.dataset.armed = "true"; del.innerHTML = "✓";
                 del.style.borderColor = "var(--neon-red)";
                 del.style.color = "var(--neon-red)";
-                del.style.boxShadow = "0 4px 0 #0a0008, 0 0 12px rgba(255,50,80,0.5)";
+                del.style.boxShadow = "0 4px 0 #0a0008,0 0 12px rgba(255,50,80,0.5)";
                 clearTimeout(del._armTimer);
                 del._armTimer = setTimeout(disarmDel, 3000);
             }
         };
         row.appendChild(del);
-
         container.appendChild(row);
     });
 }
 
-/* TASK LOGIC */
+/* ── TASK LOGIC ── */
 function addTask() {
     const input = document.getElementById("newTaskInput");
     const text  = input.value.trim().toUpperCase();
     if (!text) return;
     data.tasks.push({ text, done: false });
-    input.value = "";
-    save(); render();
+    input.value = ""; save(); render();
 }
 
 function toggleTask(i) {
-    const task = data.tasks[i];
+    const task    = data.tasks[i];
     const wasDone = task.done;
-    task.done = !task.done;
+    task.done     = !task.done;
     if (!wasDone && task.done) {
         const doneTask = data.tasks.splice(i, 1)[0];
         data.tasks.push(doneTask);
         const ov = document.getElementById("flashOverlay");
         ov.classList.add("flash");
         setTimeout(() => ov.classList.remove("flash"), 300);
+        bumpStreak();
+        showToast(TASK_MSGS[Math.floor(Math.random() * TASK_MSGS.length)]);
     }
     save(); render();
+    if (!wasDone && task.done) checkAllClear();
 }
 
-function removeTask(i) { data.tasks.splice(i, 1); save(); render(); }
-function moveUp(i)   { if (i === 0) return; [data.tasks[i],data.tasks[i-1]] = [data.tasks[i-1],data.tasks[i]]; save(); render(); }
-function moveDown(i) { if (i === data.tasks.length-1) return; [data.tasks[i],data.tasks[i+1]] = [data.tasks[i+1],data.tasks[i]]; save(); render(); }
+function removeTask(i) { data.tasks.splice(i,1); save(); render(); }
+function moveUp(i)     { if(i===0) return; [data.tasks[i],data.tasks[i-1]]=[data.tasks[i-1],data.tasks[i]]; save(); render(); }
+function moveDown(i)   { if(i===data.tasks.length-1) return; [data.tasks[i],data.tasks[i+1]]=[data.tasks[i+1],data.tasks[i]]; save(); render(); }
 
-/* ── POMODORO — wall-clock timer survives screen-off ── */
-const DURATION = 1500; // 25 min
-let timeLeft       = DURATION;
-let isRunning      = false;
-let startEpoch     = null;  // Date.now() when current run started
-let elapsedAtPause = 0;     // seconds accumulated before current run
-let tickToggle     = false;
-let tickInterval   = null;
+/* ── CLEAR ALL DONE ── */
+let clearDoneArmed = false;
+let clearDoneTimer = null;
 
-function openPomodoro()  { document.getElementById("pomodoroPage").classList.add("active"); }
-function closePomodoro() { document.getElementById("pomodoroPage").classList.remove("active"); }
-
-function updateTimerDisplay() {
-    const m  = Math.floor(timeLeft / 60);
-    const s  = timeLeft % 60;
-    const el = document.getElementById("timer");
-    el.textContent = `${m}:${s.toString().padStart(2,"0")}`;
-    el.className   = (timeLeft <= 60 && isRunning) ? "urgent" : "";
-}
-
-function computeTimeLeft() {
-    if (!isRunning) return timeLeft;
-    const totalElapsed = elapsedAtPause + Math.floor((Date.now() - startEpoch) / 1000);
-    return Math.max(0, DURATION - totalElapsed);
-}
-
-function startTick() {
-    if (tickInterval) return;
-    tickInterval = setInterval(() => {
-        if (!isRunning) return;
-        timeLeft = computeTimeLeft();
-        updateTimerDisplay();
-
-        tickToggle = !tickToggle;
-        if (tickToggle) playTick(); else playTock();
-        document.getElementById("tickDot").style.opacity = tickToggle ? "1" : "0.2";
-
-        if (timeLeft <= 0) {
-            clearInterval(tickInterval); tickInterval = null;
-            isRunning = false;
-            playDing();
-            document.getElementById("tickDot").style.opacity = "0";
-            document.getElementById("timer").className = "";
-        }
-    }, 1000);
-}
-
-function startPomodoro() {
-    if (isRunning) return;
-    if (soundOn) getAudioCtx();
-    isRunning  = true;
-    startEpoch = Date.now();
-    startTick();
-}
-
-function pausePomodoro() {
-    if (!isRunning) return;
-    elapsedAtPause += Math.floor((Date.now() - startEpoch) / 1000);
-    isRunning = false;
-    clearInterval(tickInterval); tickInterval = null;
-    document.getElementById("tickDot").style.opacity = "0.2";
-    document.getElementById("timer").className = "";
-}
-
-function resetPomodoro() {
-    // Directly stop everything regardless of isRunning state
-    clearInterval(tickInterval); tickInterval = null;
-    isRunning      = false;
-    elapsedAtPause = 0;
-    startEpoch     = null;
-    timeLeft       = DURATION;
-    updateTimerDisplay();
-    document.getElementById("tickDot").style.opacity = "1";
-    document.getElementById("timer").className = "";
-}
-
-/* Screen-off / tab-switch recovery */
-document.addEventListener("visibilitychange", () => {
-    if (!document.hidden && isRunning) {
-        timeLeft = computeTimeLeft();
-        updateTimerDisplay();
-        if (timeLeft <= 0) {
-            clearInterval(tickInterval); tickInterval = null;
-            isRunning = false;
-            playDing();
-            document.getElementById("tickDot").style.opacity = "0";
-        }
+function clearDoneClick() {
+    const btn = document.getElementById("clearDoneBtn");
+    if (clearDoneArmed) {
+        clearTimeout(clearDoneTimer);
+        clearDoneArmed = false;
+        data.tasks = data.tasks.filter(t => !t.done);
+        save(); render();
+    } else {
+        clearDoneArmed = true;
+        btn.classList.add("armed");
+        btn.textContent = "✓ CONFIRM CLEAR";
+        clearDoneTimer = setTimeout(() => {
+            clearDoneArmed = false;
+            btn.classList.remove("armed");
+            btn.textContent = "✕ CLEAR DONE";
+        }, 3000);
     }
-});
+}
 
-/* Init */
+/* ── INIT ── */
 render();
-updateTimerDisplay();
 </script>
 </body>
 </html>

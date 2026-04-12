@@ -15,22 +15,44 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overscroll-behavior:none;}
-body{font-family:'Orbitron',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;padding-bottom:env(safe-area-inset-bottom,20px);}
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:999;}
+body{font-family:'Orbitron',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;padding-bottom:calc(64px + env(safe-area-inset-bottom,0px));}
+body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:100;}
 
+/* ── HEADER ── */
 #header{display:flex;align-items:center;justify-content:center;padding:22px 20px 12px;}
 #header h1{font-family:'Press Start 2P',monospace;font-size:clamp(1.3rem,7vw,2rem);color:var(--neon-blue);text-shadow:0 0 10px var(--neon-blue),0 0 30px rgba(0,212,255,0.5),0 0 60px rgba(0,212,255,0.2);letter-spacing:4px;animation:flicker 4s infinite;}
 @keyframes flicker{0%,95%,100%{opacity:1;}96%{opacity:.7;}97%{opacity:1;}98%{opacity:.85;}}
-
 .header-line{height:2px;background:linear-gradient(90deg,transparent,var(--neon-blue),transparent);margin:0 16px 10px;box-shadow:0 0 8px var(--neon-blue);}
 
+/* ── BOTTOM NAV ── */
+#bottomNav{position:fixed;bottom:0;left:0;right:0;height:calc(56px + env(safe-area-inset-bottom,0px));background:#0a0c12;border-top:1px solid var(--border);display:flex;align-items:flex-start;z-index:300;}
+.navBtn{flex:1;padding:10px 0 0;display:flex;flex-direction:column;align-items:center;gap:4px;background:none;border:none;color:var(--text-dim);font-family:'Orbitron',sans-serif;font-size:0.55rem;letter-spacing:1px;cursor:pointer;transition:color 0.2s;}
+.navBtn .navIcon{font-size:1.3rem;line-height:1;}
+.navBtn.active{color:var(--neon-blue);}
+.navBtn.active .navIcon{filter:drop-shadow(0 0 6px var(--neon-blue));}
+
+/* ── PAGES ── */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ── STREAK ── */
 #streakBar{display:flex;align-items:center;gap:10px;padding:0 16px 14px;}
 #streakLabel{font-size:0.65rem;color:var(--neon-yellow);text-shadow:0 0 8px rgba(255,230,0,0.5);white-space:nowrap;letter-spacing:0.5px;min-width:70px;}
 #streakTrack{flex:1;height:10px;background:#1e2230;border-radius:5px;overflow:hidden;border:1px solid #2a2f42;}
 #streakFill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--neon-yellow),var(--neon-orange));box-shadow:0 0 8px rgba(255,180,0,0.5);transition:width 0.5s cubic-bezier(0.34,1.56,0.64,1);width:0%;}
 
+/* ── TASK LIST ── */
 #taskContainer{display:flex;flex-direction:column;gap:10px;padding:0 12px;}
-.taskRow{display:flex;align-items:stretch;gap:7px;}
+.taskRow{display:flex;align-items:stretch;gap:7px;transition:opacity 0.15s;}
+.taskRow.dragging{opacity:0.4;}
+.taskRow.drag-over{border-top:2px solid var(--neon-blue);}
+
+/* drag handle */
+.dragHandle{width:32px;flex-shrink:0;min-height:var(--tap-target);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:1.1rem;cursor:grab;touch-action:none;border-radius:8px;transition:color 0.15s;}
+.dragHandle:active{cursor:grabbing;color:var(--neon-blue);}
+
+/* spacer for done rows (replaces handle) */
+.dragSpacer{width:32px;flex-shrink:0;}
 
 .taskButton{flex:1;padding:0 10px;text-align:center;border-radius:8px;font-family:'Orbitron',sans-serif;font-size:clamp(0.65rem,3.5vw,0.9rem);font-weight:700;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s;border:none;position:relative;overflow:hidden;letter-spacing:0.5px;min-height:var(--tap-target);display:flex;align-items:center;justify-content:center;word-break:break-word;line-height:1.3;}
 .taskButton::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.13) 0%,transparent 55%);pointer-events:none;}
@@ -38,11 +60,10 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .pending:active{box-shadow:0 1px 0 #5a0000,inset 0 2px 4px rgba(0,0,0,0.3);transform:translateY(4px);}
 .done{background:linear-gradient(180deg,#00b865 0%,#005e33 100%);box-shadow:0 5px 0 #003d21,0 7px 18px rgba(0,255,136,0.2),inset 0 1px 0 rgba(255,255,255,0.15);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.6);}
 
-.arrowBtn{background:linear-gradient(180deg,#2a3048 0%,#1a1f30 100%);border:1px solid var(--border);color:var(--neon-blue);font-size:0.9rem;width:40px;flex-shrink:0;min-height:var(--tap-target);border-radius:8px;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s;box-shadow:0 4px 0 #0a0d15;display:flex;align-items:center;justify-content:center;}
-.arrowBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #0a0d15;}
 .deleteBtn{background:linear-gradient(180deg,#2a1a28 0%,#1a0f18 100%);border:1px solid #3d1a35;color:var(--neon-purple);font-size:1rem;width:40px;flex-shrink:0;min-height:var(--tap-target);border-radius:8px;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s;box-shadow:0 4px 0 #0a0008;display:flex;align-items:center;justify-content:center;}
 .deleteBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #0a0008;}
 
+/* ── ADD BAR ── */
 #addBar{display:flex;padding:14px 12px;gap:10px;}
 #newTaskInput{flex:1;min-width:0;border-radius:8px;padding:14px;border:1px solid var(--border);background:var(--panel);font-size:1rem;font-family:'Orbitron',sans-serif;color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;-webkit-appearance:none;}
 #newTaskInput:focus{border-color:var(--neon-blue);box-shadow:0 0 12px rgba(0,212,255,0.25);}
@@ -50,14 +71,45 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 #addBtn{flex-shrink:0;padding:14px 16px;border-radius:8px;border:none;background:linear-gradient(180deg,#0099cc 0%,#005f80 100%);color:white;font-weight:700;font-family:'Orbitron',sans-serif;cursor:pointer;font-size:0.8rem;letter-spacing:0.5px;box-shadow:0 5px 0 #003347,0 6px 15px rgba(0,212,255,0.25);transition:transform 0.1s,box-shadow 0.1s;white-space:nowrap;}
 #addBtn:active{transform:translateY(4px);box-shadow:0 1px 0 #003347;}
 
+/* ── CLEAR DONE ── */
 #clearDoneBtn{display:none;margin:0 12px 4px;width:calc(100% - 24px);background:linear-gradient(180deg,#2a1a28 0%,#1a0f18 100%);color:var(--neon-purple);font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:1px;padding:14px;border-radius:8px;border:1px solid #3d1a35;cursor:pointer;box-shadow:0 5px 0 #0a0008;transition:transform 0.1s,box-shadow 0.1s,color 0.2s,border-color 0.2s;}
 #clearDoneBtn:active{transform:translateY(4px);box-shadow:0 1px 0 #0a0008;}
 #clearDoneBtn.armed{border-color:var(--neon-red);color:var(--neon-red);box-shadow:0 5px 0 #0a0008,0 0 14px rgba(255,50,80,0.4);}
 #clearDoneBtn.visible{display:block;}
 
-#toast{position:fixed;bottom:40px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel);border:1px solid var(--neon-green);color:var(--neon-green);font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;padding:12px 22px;border-radius:30px;box-shadow:0 0 20px rgba(0,255,136,0.3);letter-spacing:1px;white-space:nowrap;opacity:0;pointer-events:none;z-index:500;transition:opacity 0.25s,transform 0.25s;}
+/* ── WEEK PAGE ── */
+#weekPage{padding:0 12px 12px;}
+.weekDay{margin-bottom:14px;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--panel);}
+.weekDayHeader{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none;}
+.weekDayHeader .dayName{font-family:'Press Start 2P',monospace;font-size:0.6rem;letter-spacing:2px;}
+.weekDayHeader .dayMeta{display:flex;align-items:center;gap:10px;}
+.dayCount{font-size:0.6rem;color:var(--text-dim);letter-spacing:0.5px;}
+.dayChevron{color:var(--text-dim);font-size:0.8rem;transition:transform 0.2s;}
+.weekDay.open .dayChevron{transform:rotate(90deg);}
+.weekDay.today .weekDayHeader{background:rgba(0,212,255,0.06);}
+.weekDay.today .dayName{color:var(--neon-blue);text-shadow:0 0 8px rgba(0,212,255,0.4);}
+.dayTasks{display:none;padding:0 10px 10px;flex-direction:column;gap:8px;}
+.weekDay.open .dayTasks{display:flex;}
+.weekTaskRow{display:flex;align-items:stretch;gap:7px;}
+.weekTaskBtn{flex:1;padding:0 10px;border-radius:7px;font-family:'Orbitron',sans-serif;font-size:clamp(0.6rem,3vw,0.82rem);font-weight:700;cursor:pointer;border:none;position:relative;overflow:hidden;min-height:48px;display:flex;align-items:center;justify-content:center;word-break:break-word;line-height:1.3;transition:transform 0.1s,box-shadow 0.1s;}
+.weekTaskBtn::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.1) 0%,transparent 55%);pointer-events:none;}
+.weekTaskBtn.pending{background:linear-gradient(180deg,#c0192a,#8b0000);box-shadow:0 4px 0 #5a0000,inset 0 1px 0 rgba(255,255,255,0.1);color:#fff;}
+.weekTaskBtn.pending:active{transform:translateY(3px);box-shadow:0 1px 0 #5a0000;}
+.weekTaskBtn.done{background:linear-gradient(180deg,#00b865,#005e33);box-shadow:0 4px 0 #003d21,inset 0 1px 0 rgba(255,255,255,0.1);color:#fff;}
+.weekDeleteBtn{background:linear-gradient(180deg,#2a1a28,#1a0f18);border:1px solid #3d1a35;color:var(--neon-purple);font-size:0.9rem;width:36px;flex-shrink:0;min-height:48px;border-radius:7px;cursor:pointer;box-shadow:0 4px 0 #0a0008;display:flex;align-items:center;justify-content:center;transition:transform 0.1s,box-shadow 0.1s;}
+.weekDeleteBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #0a0008;}
+.weekAddBar{display:flex;gap:8px;padding:4px 0 2px;}
+.weekAddInput{flex:1;min-width:0;border-radius:7px;padding:10px 12px;border:1px solid var(--border);background:#1a1e2a;font-size:0.8rem;font-family:'Orbitron',sans-serif;color:var(--text);outline:none;-webkit-appearance:none;}
+.weekAddInput:focus{border-color:var(--neon-blue);}
+.weekAddInput::placeholder{color:var(--text-dim);font-size:0.7rem;}
+.weekAddBtn{flex-shrink:0;padding:10px 12px;border-radius:7px;border:none;background:linear-gradient(180deg,#0099cc,#005f80);color:white;font-family:'Orbitron',sans-serif;font-size:0.7rem;font-weight:700;cursor:pointer;box-shadow:0 4px 0 #003347;transition:transform 0.1s,box-shadow 0.1s;white-space:nowrap;}
+.weekAddBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #003347;}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:72px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel);border:1px solid var(--neon-green);color:var(--neon-green);font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;padding:12px 22px;border-radius:30px;box-shadow:0 0 20px rgba(0,255,136,0.3);letter-spacing:1px;white-space:nowrap;opacity:0;pointer-events:none;z-index:500;transition:opacity 0.25s,transform 0.25s;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+/* ── ALL CLEAR ── */
 #allClearOverlay{position:fixed;inset:0;background:rgba(0,10,5,0.93);z-index:600;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;}
 #allClearOverlay.show{display:flex;}
 #allClearOverlay .big-emoji{font-size:4rem;margin-bottom:20px;animation:bounce 0.6s infinite alternate;}
@@ -67,22 +119,18 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 #allClearDismiss{background:linear-gradient(180deg,#00b865,#005e33);border:none;color:white;font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;padding:18px 32px;border-radius:8px;cursor:pointer;box-shadow:0 5px 0 #003d21;letter-spacing:1px;transition:transform 0.1s,box-shadow 0.1s;}
 #allClearDismiss:active{transform:translateY(4px);box-shadow:0 1px 0 #003d21;}
 
+/* ── MISC ── */
 #flashOverlay{position:fixed;inset:0;background:rgba(0,255,136,0.15);pointer-events:none;opacity:0;z-index:200;transition:opacity 0.3s;}
 #flashOverlay.flash{opacity:1;}
-
 .corner{position:fixed;width:28px;height:28px;pointer-events:none;z-index:50;opacity:.35;}
 .corner-tl{top:8px;left:8px;border-top:2px solid var(--neon-blue);border-left:2px solid var(--neon-blue);}
 .corner-tr{top:8px;right:8px;border-top:2px solid var(--neon-blue);border-right:2px solid var(--neon-blue);}
-.corner-bl{bottom:8px;left:8px;border-bottom:2px solid var(--neon-blue);border-left:2px solid var(--neon-blue);}
-.corner-br{bottom:8px;right:8px;border-bottom:2px solid var(--neon-blue);border-right:2px solid var(--neon-blue);}
 </style>
 </head>
 <body>
 
 <div class="corner corner-tl"></div>
 <div class="corner corner-tr"></div>
-<div class="corner corner-bl"></div>
-<div class="corner corner-br"></div>
 <div id="flashOverlay"></div>
 <div id="toast"></div>
 
@@ -96,70 +144,104 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 <div id="header"><h1>BUTTONS</h1></div>
 <div class="header-line"></div>
 
-<div id="streakBar">
-    <div id="streakLabel">🔥 0 days</div>
-    <div id="streakTrack"><div id="streakFill"></div></div>
+<!-- TODAY PAGE -->
+<div id="todayPage" class="page active">
+    <div id="streakBar">
+        <div id="streakLabel">🔥 0 days</div>
+        <div id="streakTrack"><div id="streakFill"></div></div>
+    </div>
+    <div id="taskContainer"></div>
+    <button id="clearDoneBtn" onclick="clearDoneClick()">✕ CLEAR DONE</button>
+    <div id="addBar">
+        <input id="newTaskInput" placeholder="New button…" onkeydown="if(event.key==='Enter')addTask()">
+        <button id="addBtn" onclick="addTask()">+ ADD</button>
+    </div>
 </div>
 
-<div id="taskContainer"></div>
-
-<button id="clearDoneBtn" onclick="clearDoneClick()">✕ CLEAR DONE</button>
-
-<div id="addBar">
-    <input id="newTaskInput" placeholder="New button…" onkeydown="if(event.key==='Enter')addTask()">
-    <button id="addBtn" onclick="addTask()">+ ADD</button>
+<!-- WEEK PAGE -->
+<div id="weekPage" class="page">
+    <!-- Days rendered by JS -->
 </div>
+
+<!-- BOTTOM NAV -->
+<nav id="bottomNav">
+    <button class="navBtn active" id="navToday" onclick="switchTab('today')">
+        <span class="navIcon">🎯</span>TODAY
+    </button>
+    <button class="navBtn" id="navWeek" onclick="switchTab('week')">
+        <span class="navIcon">📅</span>WEEK
+    </button>
+</nav>
 
 <script>
-/* ── DATA ── */
+/* ══════════════════════════════════════════
+   DATA
+══════════════════════════════════════════ */
 function loadData() {
     const v2 = localStorage.getItem("buttons_v2");
     if (v2) return JSON.parse(v2);
     const v1 = localStorage.getItem("buttons_v1");
-    if (v1) { const old = JSON.parse(v1); return { tasks: old.tasks || [], streak: 0, lastDate: "" }; }
-    return { tasks: [], streak: 0, lastDate: "" };
+    if (v1) { const o = JSON.parse(v1); return { tasks: o.tasks||[], streak:0, lastDate:"" }; }
+    return { tasks:[], streak:0, lastDate:"" };
 }
 let data = loadData();
 function save() { localStorage.setItem("buttons_v2", JSON.stringify(data)); }
 
-/* ── STREAK ── */
+// Week data: { mon:[], tue:[], ... } each item = { text, done }
+function loadWeek() {
+    const w = localStorage.getItem("buttons_week");
+    if (w) return JSON.parse(w);
+    return { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
+}
+let week = loadWeek();
+function saveWeek() { localStorage.setItem("buttons_week", JSON.stringify(week)); }
+
+/* ══════════════════════════════════════════
+   TAB SWITCHING
+══════════════════════════════════════════ */
+let currentTab = "today";
+function switchTab(tab) {
+    currentTab = tab;
+    document.getElementById("todayPage").classList.toggle("active", tab === "today");
+    document.getElementById("weekPage").classList.toggle("active", tab === "week");
+    document.getElementById("navToday").classList.toggle("active", tab === "today");
+    document.getElementById("navWeek").classList.toggle("active", tab === "week");
+    if (tab === "week") renderWeek();
+}
+
+/* ══════════════════════════════════════════
+   STREAK
+══════════════════════════════════════════ */
 function todayStr() { return new Date().toLocaleDateString("en-CA"); }
 
 function updateStreakUI() {
     const s = data.streak || 0;
-    document.getElementById("streakLabel").textContent = "🔥 " + s + " day" + (s === 1 ? "" : "s");
-    document.getElementById("streakFill").style.width = Math.min(100, (s / 30) * 100) + "%";
+    document.getElementById("streakLabel").textContent = "🔥 " + s + " day" + (s===1?"":"s");
+    document.getElementById("streakFill").style.width = Math.min(100,(s/30)*100) + "%";
 }
 
 function bumpStreak() {
     const today     = todayStr();
-    const yesterday = new Date(Date.now() - 86400000).toLocaleDateString("en-CA");
+    const yesterday = new Date(Date.now()-86400000).toLocaleDateString("en-CA");
     if (data.lastDate === today) return;
-    data.streak = (data.lastDate === yesterday) ? (data.streak || 0) + 1 : 1;
+    data.streak = (data.lastDate === yesterday) ? (data.streak||0)+1 : 1;
     data.lastDate = today;
-    save();
-    updateStreakUI();
+    save(); updateStreakUI();
 }
 
-/* ── TOAST ── */
+/* ══════════════════════════════════════════
+   TOAST + ALL-CLEAR
+══════════════════════════════════════════ */
 const TASK_MSGS = [
-    "BOOM. Button pressed. 💥",
-    "Look at you go! 🚀",
-    "That one didn't stand a chance.",
-    "DESTROYED IT. 🔥",
-    "Button obliterated. Nice work.",
+    "BOOM. Button pressed. 💥","Look at you go! 🚀","That one didn't stand a chance.",
+    "DESTROYED IT. 🔥","Button obliterated. Nice work.",
     "They said it couldn't be done. They were wrong.",
-    "One small tap for you, one giant leap. 🌕",
-    "Your future self says thanks.",
-    "Scientists confirm: that was impressive.",
-    "Achievement unlocked: Got stuff done. 🏅",
-    "You absolute machine. 🤖",
-    "That button never saw it coming.",
-    "Task terminated. Proceed. ⚡",
-    "Productivity level: dangerous.",
+    "One small tap for you, one giant leap. 🌕","Your future self says thanks.",
+    "Scientists confirm: that was impressive.","Achievement unlocked: Got stuff done. 🏅",
+    "You absolute machine. 🤖","That button never saw it coming.",
+    "Task terminated. Proceed. ⚡","Productivity level: dangerous.",
     "I'm not crying, you're crying. 😭"
 ];
-
 const ALL_CLEAR_MSGS = [
     "Every single button pressed. You are a legend. Go touch grass. 🌿",
     "Zero buttons remaining. Maximum productivity achieved. The simulation is impressed. 🤖",
@@ -174,37 +256,110 @@ function showToast(msg) {
     clearTimeout(toastTimer);
     el.textContent = msg;
     el.classList.add("show");
-    toastTimer = setTimeout(() => el.classList.remove("show"), 2800);
+    toastTimer = setTimeout(()=>el.classList.remove("show"), 2800);
 }
 
 function checkAllClear() {
     if (!data.tasks.length) return;
-    if (!data.tasks.every(t => t.done)) return;
-    setTimeout(() => {
+    if (!data.tasks.every(t=>t.done)) return;
+    setTimeout(()=>{
         document.getElementById("allClearMsg").textContent =
-            ALL_CLEAR_MSGS[Math.floor(Math.random() * ALL_CLEAR_MSGS.length)];
+            ALL_CLEAR_MSGS[Math.floor(Math.random()*ALL_CLEAR_MSGS.length)];
         document.getElementById("allClearOverlay").classList.add("show");
     }, 600);
 }
+function dismissAllClear() { document.getElementById("allClearOverlay").classList.remove("show"); }
 
-function dismissAllClear() {
-    document.getElementById("allClearOverlay").classList.remove("show");
+/* ══════════════════════════════════════════
+   DRAG-TO-REORDER (touch + mouse)
+══════════════════════════════════════════ */
+let dragSrcIdx = null;
+let dragGhost  = null;
+let dragStartY = 0;
+let dragRows   = [];
+
+function buildDragHandle(i) {
+    const h = document.createElement("div");
+    h.className = "dragHandle";
+    h.innerHTML = "&#9776;"; // ☰
+    h.dataset.idx = i;
+
+    function onStart(clientY) {
+        dragSrcIdx = i;
+        dragStartY = clientY;
+        dragRows = Array.from(document.querySelectorAll("#taskContainer .taskRow"));
+        dragRows[i].classList.add("dragging");
+        document.body.style.userSelect = "none";
+    }
+
+    function onMove(clientY) {
+        if (dragSrcIdx === null) return;
+        const delta = clientY - dragStartY;
+        const rowH  = dragRows[0].getBoundingClientRect().height + 10; // gap=10
+        const newIdx = Math.max(0, Math.min(dragRows.length-1, dragSrcIdx + Math.round(delta/rowH)));
+        dragRows.forEach(r=>r.classList.remove("drag-over"));
+        if (newIdx !== dragSrcIdx && dragRows[newIdx]) dragRows[newIdx].classList.add("drag-over");
+    }
+
+    function onEnd(clientY) {
+        if (dragSrcIdx === null) return;
+        const delta = clientY - dragStartY;
+        const rowH  = dragRows[0] ? dragRows[0].getBoundingClientRect().height + 10 : 64;
+        let newIdx  = Math.max(0, Math.min(data.tasks.length-1, dragSrcIdx + Math.round(delta/rowH)));
+
+        // Only reorder among pending tasks
+        const pendingIdxs = data.tasks.map((t,i)=>t.done?null:i).filter(x=>x!==null);
+        const srcPendingPos = pendingIdxs.indexOf(dragSrcIdx);
+        if (srcPendingPos === -1) { cleanup(); return; } // dragging done item — no-op
+
+        let tgtPendingPos = Math.max(0, Math.min(pendingIdxs.length-1, srcPendingPos + Math.round(delta/rowH)));
+        const tgtIdx = pendingIdxs[tgtPendingPos];
+
+        if (tgtIdx !== dragSrcIdx && tgtIdx !== undefined) {
+            const moved = data.tasks.splice(dragSrcIdx, 1)[0];
+            data.tasks.splice(tgtIdx, 0, moved);
+            save();
+        }
+        cleanup();
+        render();
+    }
+
+    function cleanup() {
+        dragRows.forEach(r=>{ r.classList.remove("dragging"); r.classList.remove("drag-over"); });
+        dragSrcIdx = null;
+        document.body.style.userSelect = "";
+    }
+
+    // Touch
+    h.addEventListener("touchstart", e=>{ e.preventDefault(); onStart(e.touches[0].clientY); }, {passive:false});
+    h.addEventListener("touchmove",  e=>{ e.preventDefault(); onMove(e.touches[0].clientY); },  {passive:false});
+    h.addEventListener("touchend",   e=>{ onEnd(e.changedTouches[0].clientY); },                 {passive:true});
+
+    // Mouse (desktop)
+    h.addEventListener("mousedown", e=>{ onStart(e.clientY);
+        const mm = e2=>onMove(e2.clientY);
+        const mu = e2=>{ onEnd(e2.clientY); window.removeEventListener("mousemove",mm); window.removeEventListener("mouseup",mu); };
+        window.addEventListener("mousemove",mm);
+        window.addEventListener("mouseup",mu);
+    });
+
+    return h;
 }
 
-/* ── RENDER ── */
+/* ══════════════════════════════════════════
+   TODAY RENDER
+══════════════════════════════════════════ */
 function render() {
     updateStreakUI();
     const container = document.getElementById("taskContainer");
     container.innerHTML = "";
 
-    const hasDone = data.tasks.some(t => t.done);
+    const hasDone = data.tasks.some(t=>t.done);
     const clearBtn = document.getElementById("clearDoneBtn");
     clearBtn.classList.toggle("visible", hasDone);
     if (!hasDone && clearDoneArmed) {
-        clearTimeout(clearDoneTimer);
-        clearDoneArmed = false;
-        clearBtn.classList.remove("armed");
-        clearBtn.textContent = "✕ CLEAR DONE";
+        clearTimeout(clearDoneTimer); clearDoneArmed = false;
+        clearBtn.classList.remove("armed"); clearBtn.textContent = "✕ CLEAR DONE";
     }
 
     data.tasks.forEach((task, i) => {
@@ -212,18 +367,10 @@ function render() {
         row.className = "taskRow";
 
         if (!task.done) {
-            ["▲","▼"].forEach((sym, dir) => {
-                const ab = document.createElement("button");
-                ab.className = "arrowBtn"; ab.innerHTML = sym;
-                ab.onclick = () => dir === 0 ? moveUp(i) : moveDown(i);
-                row.appendChild(ab);
-            });
+            row.appendChild(buildDragHandle(i));
         } else {
-            [0,1].forEach(() => {
-                const sp = document.createElement("div");
-                sp.style.cssText = "width:40px;flex-shrink:0;";
-                row.appendChild(sp);
-            });
+            const sp = document.createElement("div"); sp.className = "dragSpacer";
+            row.appendChild(sp);
         }
 
         const btn = document.createElement("button");
@@ -238,19 +385,15 @@ function render() {
         function disarmDel() {
             clearTimeout(del._armTimer); del._armTimer = null;
             del.dataset.armed = "false"; del.innerHTML = "✕";
-            del.style.borderColor = ""; del.style.color = ""; del.style.boxShadow = "";
+            del.style.borderColor=""; del.style.color=""; del.style.boxShadow="";
         }
-
-        del.onclick = (e) => {
+        del.onclick = e => {
             e.stopPropagation();
-            if (del.dataset.armed === "true") {
-                clearTimeout(del._armTimer);
-                removeTask(i);
-            } else {
+            if (del.dataset.armed === "true") { clearTimeout(del._armTimer); removeTask(i); }
+            else {
                 del.dataset.armed = "true"; del.innerHTML = "✓";
-                del.style.borderColor = "var(--neon-red)";
-                del.style.color = "var(--neon-red)";
-                del.style.boxShadow = "0 4px 0 #0a0008,0 0 12px rgba(255,50,80,0.5)";
+                del.style.borderColor="var(--neon-red)"; del.style.color="var(--neon-red)";
+                del.style.boxShadow="0 4px 0 #0a0008,0 0 12px rgba(255,50,80,0.5)";
                 clearTimeout(del._armTimer);
                 del._armTimer = setTimeout(disarmDel, 3000);
             }
@@ -260,60 +403,154 @@ function render() {
     });
 }
 
-/* ── TASK LOGIC ── */
+/* ══════════════════════════════════════════
+   TODAY TASK LOGIC
+══════════════════════════════════════════ */
 function addTask() {
     const input = document.getElementById("newTaskInput");
     const text  = input.value.trim().toUpperCase();
     if (!text) return;
-    data.tasks.push({ text, done: false });
-    input.value = ""; save(); render();
+    data.tasks.push({text, done:false});
+    input.value=""; save(); render();
 }
 
 function toggleTask(i) {
-    const task    = data.tasks[i];
-    const wasDone = task.done;
-    task.done     = !task.done;
+    const task=data.tasks[i], wasDone=task.done;
+    task.done = !task.done;
     if (!wasDone && task.done) {
-        const doneTask = data.tasks.splice(i, 1)[0];
-        data.tasks.push(doneTask);
-        const ov = document.getElementById("flashOverlay");
-        ov.classList.add("flash");
-        setTimeout(() => ov.classList.remove("flash"), 300);
+        const done = data.tasks.splice(i,1)[0];
+        data.tasks.push(done);
+        const ov=document.getElementById("flashOverlay");
+        ov.classList.add("flash"); setTimeout(()=>ov.classList.remove("flash"),300);
         bumpStreak();
-        showToast(TASK_MSGS[Math.floor(Math.random() * TASK_MSGS.length)]);
+        showToast(TASK_MSGS[Math.floor(Math.random()*TASK_MSGS.length)]);
     }
     save(); render();
     if (!wasDone && task.done) checkAllClear();
 }
 
 function removeTask(i) { data.tasks.splice(i,1); save(); render(); }
-function moveUp(i)     { if(i===0) return; [data.tasks[i],data.tasks[i-1]]=[data.tasks[i-1],data.tasks[i]]; save(); render(); }
-function moveDown(i)   { if(i===data.tasks.length-1) return; [data.tasks[i],data.tasks[i+1]]=[data.tasks[i+1],data.tasks[i]]; save(); render(); }
 
-/* ── CLEAR ALL DONE ── */
-let clearDoneArmed = false;
-let clearDoneTimer = null;
-
+/* ── CLEAR DONE ── */
+let clearDoneArmed=false, clearDoneTimer=null;
 function clearDoneClick() {
-    const btn = document.getElementById("clearDoneBtn");
+    const btn=document.getElementById("clearDoneBtn");
     if (clearDoneArmed) {
-        clearTimeout(clearDoneTimer);
-        clearDoneArmed = false;
-        data.tasks = data.tasks.filter(t => !t.done);
-        save(); render();
+        clearTimeout(clearDoneTimer); clearDoneArmed=false;
+        data.tasks=data.tasks.filter(t=>!t.done); save(); render();
     } else {
-        clearDoneArmed = true;
-        btn.classList.add("armed");
-        btn.textContent = "✓ CONFIRM CLEAR";
-        clearDoneTimer = setTimeout(() => {
-            clearDoneArmed = false;
-            btn.classList.remove("armed");
-            btn.textContent = "✕ CLEAR DONE";
-        }, 3000);
+        clearDoneArmed=true; btn.classList.add("armed"); btn.textContent="✓ CONFIRM CLEAR";
+        clearDoneTimer=setTimeout(()=>{ clearDoneArmed=false; btn.classList.remove("armed"); btn.textContent="✕ CLEAR DONE"; },3000);
     }
 }
 
-/* ── INIT ── */
+/* ══════════════════════════════════════════
+   WEEK PAGE
+══════════════════════════════════════════ */
+const DAY_KEYS  = ["mon","tue","wed","thu","fri","sat","sun"];
+const DAY_NAMES = ["MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","SUNDAY"];
+const DAY_COLORS = [
+    "var(--neon-blue)","var(--neon-blue)","var(--neon-blue)",
+    "var(--neon-blue)","var(--neon-blue)",
+    "var(--neon-purple)","var(--neon-purple)"
+];
+
+function getTodayKey() {
+    const d = new Date().getDay(); // 0=Sun
+    return ["sun","mon","tue","wed","thu","fri","sat"][d];
+}
+
+function renderWeek() {
+    const page = document.getElementById("weekPage");
+    page.innerHTML = "";
+    const todayKey = getTodayKey();
+
+    DAY_KEYS.forEach((key, di) => {
+        const tasks = week[key] || [];
+        const isToday = (key === todayKey);
+        const doneCount = tasks.filter(t=>t.done).length;
+
+        const card = document.createElement("div");
+        card.className = "weekDay" + (isToday?" today":"");
+
+        // Header
+        const hdr = document.createElement("div");
+        hdr.className = "weekDayHeader";
+        hdr.innerHTML = `
+            <span class="dayName" style="color:${isToday?DAY_COLORS[di]:"var(--text-dim)"}">${DAY_NAMES[di]}</span>
+            <span class="dayMeta">
+                <span class="dayCount">${doneCount}/${tasks.length}</span>
+                <span class="dayChevron">▶</span>
+            </span>`;
+        hdr.onclick = () => {
+            card.classList.toggle("open");
+        };
+        card.appendChild(hdr);
+
+        // Task list
+        const taskArea = document.createElement("div");
+        taskArea.className = "dayTasks";
+
+        tasks.forEach((task, ti) => {
+            const row = document.createElement("div");
+            row.className = "weekTaskRow";
+
+            const btn = document.createElement("button");
+            btn.className = "weekTaskBtn " + (task.done?"done":"pending");
+            btn.textContent = task.done ? "✔ "+task.text : task.text;
+            btn.onclick = () => { week[key][ti].done = !week[key][ti].done; saveWeek(); renderWeek(); };
+            row.appendChild(btn);
+
+            const del = document.createElement("button");
+            del.className = "weekDeleteBtn"; del.innerHTML = "✕"; del.dataset.armed="false";
+            function wDisarm() {
+                clearTimeout(del._t); del._t=null; del.dataset.armed="false"; del.innerHTML="✕";
+                del.style.borderColor=""; del.style.color=""; del.style.boxShadow="";
+            }
+            del.onclick = e => {
+                e.stopPropagation();
+                if (del.dataset.armed==="true") { clearTimeout(del._t); week[key].splice(ti,1); saveWeek(); renderWeek(); }
+                else {
+                    del.dataset.armed="true"; del.innerHTML="✓";
+                    del.style.borderColor="var(--neon-red)"; del.style.color="var(--neon-red)";
+                    del.style.boxShadow="0 3px 0 #0a0008,0 0 10px rgba(255,50,80,0.5)";
+                    clearTimeout(del._t); del._t=setTimeout(wDisarm,3000);
+                }
+            };
+            row.appendChild(del);
+            taskArea.appendChild(row);
+        });
+
+        // Add bar for this day
+        const addBar = document.createElement("div");
+        addBar.className = "weekAddBar";
+        const inp = document.createElement("input");
+        inp.className = "weekAddInput"; inp.placeholder = "Add to "+DAY_NAMES[di].toLowerCase()+"…";
+        inp.onkeydown = e => { if(e.key==="Enter") addWeekTask(key, inp); };
+        const addBtn = document.createElement("button");
+        addBtn.className = "weekAddBtn"; addBtn.textContent = "+ ADD";
+        addBtn.onclick = () => addWeekTask(key, inp);
+        addBar.appendChild(inp); addBar.appendChild(addBtn);
+        taskArea.appendChild(addBar);
+        card.appendChild(taskArea);
+        page.appendChild(card);
+
+        // Auto-open today
+        if (isToday) card.classList.add("open");
+    });
+}
+
+function addWeekTask(key, input) {
+    const text = input.value.trim().toUpperCase();
+    if (!text) return;
+    if (!week[key]) week[key]=[];
+    week[key].push({text, done:false});
+    input.value=""; saveWeek(); renderWeek();
+}
+
+/* ══════════════════════════════════════════
+   INIT
+══════════════════════════════════════════ */
 render();
 </script>
 </body>

@@ -15,7 +15,8 @@
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 html,body{height:100%;overscroll-behavior:none;}
-body{font-family:'Orbitron',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;padding-bottom:calc(64px + env(safe-area-inset-bottom,0px));}
+body{font-family:'Orbitron',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+.page{padding-bottom:calc(80px + env(safe-area-inset-bottom,0px));min-height:100vh;overflow-y:auto;}
 body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:100;}
 
 /* ── HEADER ── */
@@ -32,7 +33,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .navBtn.active .navIcon{filter:drop-shadow(0 0 6px var(--neon-blue));}
 
 /* ── PAGES ── */
-.page{display:none;}
+.page{display:none;padding-bottom:calc(80px + env(safe-area-inset-bottom,0px));}
 .page.active{display:block;}
 
 /* ── STREAK ── */
@@ -78,7 +79,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 #clearDoneBtn.visible{display:block;}
 
 /* ── WEEK PAGE ── */
-#weekPage{padding:0 12px 12px;}
+#weekPage{padding:0 12px calc(80px + env(safe-area-inset-bottom,0px));}
 .weekDay{margin-bottom:14px;border-radius:10px;overflow:hidden;border:1px solid var(--border);background:var(--panel);}
 .weekDayHeader{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer;user-select:none;}
 .weekDayHeader .dayName{font-family:'Press Start 2P',monospace;font-size:0.6rem;letter-spacing:2px;}

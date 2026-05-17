@@ -3,367 +3,585 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Buttons</title>
-<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Fairborn Fire – Radio Template</title>
 <style>
-:root {
-  --bg:#0d0f14; --panel:#161a24; --border:#2a2f42;
-  --neon-blue:#00d4ff; --neon-green:#00ff88; --neon-red:#ff3355;
-  --neon-purple:#bf5fff; --neon-yellow:#ffe600; --neon-orange:#ff8c00;
-  --text:#e8eaf0; --text-dim:#6b7280; --tap:54px;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overscroll-behavior:none;}
-body{font-family:'Orbitron',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+  @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Share+Tech+Mono&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
+  :root{
+    --bg:#0d1117;--surface:#161b22;--surface2:#1c2330;--border:#30363d;
+    --accent:#e05c1a;--accent2:#f0a500;--accent3:#1a7fbf;
+    --text:#e6edf3;--muted:#8b949e;--red:#da3633;--green:#2ea043;
+    --match-bg:rgba(240,165,0,.2);--match-border:#f0a500;
+    --edit-border:#1a7fbf;--edit-bg:rgba(26,127,191,.1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+  body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh;overscroll-behavior-y:none;}
 
-/* scanline overlay */
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,0.07) 2px,rgba(0,0,0,0.07) 4px);pointer-events:none;z-index:100;}
+  /* HEADER */
+  header{background:linear-gradient(160deg,#0d1117 0%,#1a1f2e 55%,#0d1117 100%);border-bottom:3px solid var(--accent);padding:12px 16px 10px;display:flex;flex-direction:column;gap:10px;position:sticky;top:0;z-index:200;box-shadow:0 3px 18px rgba(0,0,0,.7);}
+  .header-top{display:flex;align-items:center;gap:12px;}
+  .badge{background:var(--accent);color:#fff;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:11px;letter-spacing:2px;padding:4px 10px;border-radius:4px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+  h1{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:clamp(18px,5vw,24px);letter-spacing:1px;line-height:1.1;}
+  h1 span{color:var(--accent2);}
+  .subtitle{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.8px;margin-top:3px;}
+  .search-row{display:flex;gap:8px;align-items:center;}
+  #searchInput{flex:1;min-width:0;background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-family:'Share Tech Mono',monospace;font-size:16px;padding:10px 14px;border-radius:6px;outline:none;transition:border-color .2s;}
+  #searchInput:focus{border-color:var(--accent);}
+  #searchInput::placeholder{color:var(--muted);font-size:14px;}
+  .nav-btn{background:var(--surface2);border:1.5px solid var(--border);color:var(--text);font-size:18px;padding:8px 14px;border-radius:6px;cursor:pointer;transition:background .15s;flex-shrink:0;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;}
+  .nav-btn:hover,.nav-btn:active{background:var(--accent);border-color:var(--accent);}
+  .nav-btn:disabled{opacity:.3;}
+  .nav-btn:disabled:hover{background:var(--surface2);border-color:var(--border);}
+  .clear-btn{background:transparent;border:1.5px solid var(--border);color:var(--muted);font-size:15px;padding:8px 11px;border-radius:6px;cursor:pointer;min-width:44px;min-height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .clear-btn:hover,.clear-btn:active{border-color:var(--red);color:var(--red);}
+  #matchCount{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--accent2);white-space:nowrap;min-width:60px;text-align:right;flex-shrink:0;}
+  .tools-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .tool-btn{background:transparent;border:1.5px solid var(--border);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:600;padding:6px 12px;border-radius:5px;cursor:pointer;min-height:36px;letter-spacing:.5px;transition:all .15s;}
+  .tool-btn:hover,.tool-btn:active{border-color:var(--accent3);color:var(--accent3);}
+  .tool-btn.edit-active{border-color:var(--edit-border);color:var(--edit-border);background:var(--edit-bg);}
 
-/* corner brackets */
-.corner{position:fixed;width:28px;height:28px;pointer-events:none;z-index:50;opacity:.35;}
-.corner-tl{top:8px;left:8px;border-top:2px solid var(--neon-blue);border-left:2px solid var(--neon-blue);}
-.corner-tr{top:8px;right:8px;border-top:2px solid var(--neon-blue);border-right:2px solid var(--neon-blue);}
+  /* EDIT MODE BANNER */
+  .edit-banner{display:none;background:rgba(26,127,191,.15);border:1.5px solid var(--edit-border);border-radius:6px;padding:8px 14px;font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--edit-border);letter-spacing:.5px;}
+  .edit-banner.show{display:block;}
 
-/* HEADER */
-#header{display:flex;align-items:center;justify-content:center;padding:28px 20px 12px;}
-#header h1{font-family:'Press Start 2P',monospace;font-size:clamp(1.4rem,7vw,2rem);color:var(--neon-blue);text-shadow:0 0 10px var(--neon-blue),0 0 30px rgba(0,212,255,0.5),0 0 60px rgba(0,212,255,0.2);letter-spacing:4px;animation:flicker 4s infinite;}
-@keyframes flicker{0%,95%,100%{opacity:1;}96%{opacity:.7;}97%{opacity:1;}98%{opacity:.85;}}
-.header-line{height:2px;background:linear-gradient(90deg,transparent,var(--neon-blue),transparent);margin:0 16px 14px;box-shadow:0 0 8px var(--neon-blue);}
+  /* EXPORT / IMPORT */
+  .tool-btn.export{border-color:#2ea043;color:#2ea043;}
+  .tool-btn.export:hover{background:rgba(46,160,67,.1);}
+  .tool-btn.import-btn{border-color:#bc8cff;color:#bc8cff;}
+  .tool-btn.import-btn:hover{background:rgba(188,140,255,.1);}
+  #importFile{display:none;}
 
-/* STREAK */
-#streakBar{display:flex;align-items:center;gap:10px;padding:0 16px 16px;}
-#streakLabel{font-size:0.65rem;color:var(--neon-yellow);text-shadow:0 0 8px rgba(255,230,0,0.5);white-space:nowrap;letter-spacing:0.5px;min-width:72px;}
-#streakTrack{flex:1;height:10px;background:#1e2230;border-radius:5px;overflow:hidden;border:1px solid var(--border);}
-#streakFill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--neon-yellow),var(--neon-orange));box-shadow:0 0 8px rgba(255,180,0,0.5);transition:width 0.5s cubic-bezier(0.34,1.56,0.64,1);width:0%;}
+  /* DISCLAIMER MODAL */
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+  .modal-overlay.show{display:flex;}
+  .modal{background:#1c2330;border:1.5px solid var(--accent);border-radius:10px;padding:24px;max-width:420px;width:100%;font-family:'Barlow Condensed',sans-serif;}
+  .modal h2{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:20px;color:var(--accent);margin-bottom:12px;letter-spacing:1px;}
+  .modal p{font-size:15px;color:var(--text);line-height:1.5;margin-bottom:10px;}
+  .modal .warn{color:var(--accent2);font-family:'Share Tech Mono',monospace;font-size:12px;line-height:1.6;background:rgba(240,165,0,.08);border:1px solid rgba(240,165,0,.3);border-radius:6px;padding:10px 12px;margin-bottom:16px;}
+  .modal-btns{display:flex;gap:10px;flex-wrap:wrap;}
+  .modal-btn{flex:1;min-width:120px;padding:10px 14px;border-radius:6px;font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;letter-spacing:.5px;cursor:pointer;border:none;transition:opacity .15s;}
+  .modal-btn.confirm{background:var(--accent);color:#fff;}
+  .modal-btn.cancel{background:var(--surface2);color:var(--muted);border:1.5px solid var(--border);}
+  .modal-btn:hover{opacity:.85;}
 
-/* TASK LIST */
-#taskContainer{display:flex;flex-direction:column;gap:10px;padding:0 12px;}
-.taskRow{display:flex;align-items:stretch;gap:7px;}
-.taskRow.dragging{opacity:0.4;}
-.taskRow.drag-over{border-top:2px solid var(--neon-blue);}
+  main{padding:12px;max-width:900px;margin:0 auto;}
 
-.dragHandle{width:32px;flex-shrink:0;min-height:var(--tap);display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:1.1rem;cursor:grab;touch-action:none;border-radius:8px;transition:color 0.15s;}
-.dragHandle:active{cursor:grabbing;color:var(--neon-blue);}
-.dragSpacer{width:32px;flex-shrink:0;}
+  /* ACCORDION */
+  .accordion{border:1.5px solid var(--border);border-radius:8px;margin-bottom:10px;overflow:hidden;}
+  .accordion.has-match{border-color:var(--match-border);box-shadow:0 0 0 1px var(--match-border),0 4px 16px rgba(240,165,0,.12);}
+  .acc-header{display:flex;align-items:center;padding:13px 14px;cursor:pointer;background:var(--surface);gap:12px;user-select:none;-webkit-user-select:none;transition:background .15s;min-height:62px;}
+  .acc-header:active{background:var(--surface2);}
+  .zone-stripe{width:6px;min-height:44px;border-radius:3px;flex-shrink:0;}
+  .acc-title-wrap{flex:1;min-width:0;}
 
-.taskButton{flex:1;padding:0 10px;text-align:center;border-radius:8px;font-family:'Orbitron',sans-serif;font-size:clamp(0.65rem,3.5vw,0.9rem);font-weight:700;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s;border:none;position:relative;overflow:hidden;letter-spacing:0.5px;min-height:var(--tap);display:flex;align-items:center;justify-content:center;word-break:break-word;line-height:1.3;}
-.taskButton::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,0.13) 0%,transparent 55%);pointer-events:none;}
-.pending{background:linear-gradient(180deg,#c0192a 0%,#8b0000 100%);box-shadow:0 5px 0 #5a0000,0 7px 18px rgba(255,30,60,0.3),inset 0 1px 0 rgba(255,255,255,0.15);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.6);}
-.pending:active{box-shadow:0 1px 0 #5a0000,inset 0 2px 4px rgba(0,0,0,0.3);transform:translateY(4px);}
-.done{background:linear-gradient(180deg,#00b865 0%,#005e33 100%);box-shadow:0 5px 0 #003d21,0 7px 18px rgba(0,255,136,0.2),inset 0 1px 0 rgba(255,255,255,0.15);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,0.6);}
+  /* EDITABLE ZONE LABEL / SUB */
+  .acc-title{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:20px;letter-spacing:.5px;line-height:1.1;color:var(--text);}
+  .acc-sub{font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--muted);margin-top:2px;line-height:1.2;}
+  .editable-label{background:transparent;border:none;outline:none;color:inherit;font:inherit;width:100%;cursor:default;}
+  .edit-mode .editable-label{cursor:text;border-bottom:1.5px dashed var(--edit-border);background:var(--edit-bg);border-radius:3px 3px 0 0;padding:1px 4px;}
+  .editable-label:focus{border-bottom:1.5px solid var(--edit-border);background:rgba(26,127,191,.18);}
 
-.deleteBtn{background:linear-gradient(180deg,#2a1a28 0%,#1a0f18 100%);border:1px solid #3d1a35;color:var(--neon-purple);font-size:1rem;width:40px;flex-shrink:0;min-height:var(--tap);border-radius:8px;cursor:pointer;transition:transform 0.1s,box-shadow 0.1s;box-shadow:0 4px 0 #0a0008;display:flex;align-items:center;justify-content:center;}
-.deleteBtn:active{transform:translateY(3px);box-shadow:0 1px 0 #0a0008;}
+  .match-pill{background:var(--match-bg);border:1px solid var(--match-border);color:var(--accent2);font-family:'Share Tech Mono',monospace;font-size:11px;padding:2px 8px;border-radius:10px;display:none;white-space:nowrap;flex-shrink:0;}
+  .has-match .match-pill{display:block;}
+  .chevron{color:var(--muted);font-size:14px;transition:transform .25s;flex-shrink:0;margin-left:2px;}
+  .accordion.open .chevron{transform:rotate(180deg);}
 
-/* ADD BAR */
-#addBar{display:flex;padding:14px 12px 10px;gap:10px;}
-#newTaskInput{flex:1;min-width:0;border-radius:8px;padding:14px;border:1px solid var(--border);background:var(--panel);font-size:1rem;font-family:'Orbitron',sans-serif;color:var(--text);outline:none;transition:border-color 0.2s,box-shadow 0.2s;-webkit-appearance:none;}
-#newTaskInput:focus{border-color:var(--neon-blue);box-shadow:0 0 12px rgba(0,212,255,0.25);}
-#newTaskInput::placeholder{color:var(--text-dim);font-size:0.75rem;}
-#addBtn{flex-shrink:0;padding:14px 16px;border-radius:8px;border:none;background:linear-gradient(180deg,#0099cc 0%,#005f80 100%);color:white;font-weight:700;font-family:'Orbitron',sans-serif;cursor:pointer;font-size:0.8rem;letter-spacing:0.5px;box-shadow:0 5px 0 #003347,0 6px 15px rgba(0,212,255,0.25);transition:transform 0.1s,box-shadow 0.1s;white-space:nowrap;}
-#addBtn:active{transform:translateY(4px);box-shadow:0 1px 0 #003347;}
+  /* ZONE ACTIONS (edit mode only) */
+  .zone-actions{display:none;align-items:center;gap:8px;padding:8px 14px;background:rgba(26,127,191,.07);border-top:1px solid var(--border);}
+  .edit-mode .zone-actions{display:flex;flex-wrap:wrap;}
+  .zact-btn{background:transparent;border:1px solid var(--border);color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;min-height:32px;transition:all .15s;}
+  .zact-btn:hover{border-color:var(--accent3);color:var(--accent3);}
+  .zact-btn.danger:hover{border-color:var(--red);color:var(--red);}
+  .zact-btn.add{border-color:var(--green);color:var(--green);}
 
-/* CLEAR DONE */
-#clearDoneBtn{display:none;margin:0 12px 4px;width:calc(100% - 24px);background:linear-gradient(180deg,#2a1a28 0%,#1a0f18 100%);color:var(--neon-purple);font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;letter-spacing:1px;padding:14px;border-radius:8px;border:1px solid #3d1a35;cursor:pointer;box-shadow:0 5px 0 #0a0008;transition:transform 0.1s,box-shadow 0.1s;}
-#clearDoneBtn:active{transform:translateY(4px);box-shadow:0 1px 0 #0a0008;}
-#clearDoneBtn.armed{border-color:var(--neon-red);color:var(--neon-red);box-shadow:0 5px 0 #0a0008,0 0 14px rgba(255,50,80,0.4);}
-#clearDoneBtn.visible{display:block;}
+  .acc-body{display:none;background:var(--surface2);border-top:1.5px solid var(--border);}
+  .accordion.open .acc-body{display:block;}
 
-/* TOAST */
-#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel);border:1px solid var(--neon-green);color:var(--neon-green);font-family:'Orbitron',sans-serif;font-size:0.75rem;font-weight:700;padding:12px 22px;border-radius:30px;box-shadow:0 0 20px rgba(0,255,136,0.3);letter-spacing:1px;white-space:nowrap;opacity:0;pointer-events:none;z-index:500;transition:opacity 0.25s,transform 0.25s;}
-#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+  /* TABLE */
+  .grid-table{width:100%;border-collapse:collapse;}
+  .grid-table thead tr{background:rgba(13,17,23,.85);border-bottom:1.5px solid var(--border);}
+  .grid-table th{color:var(--accent);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;letter-spacing:1.5px;text-transform:uppercase;padding:8px 14px;text-align:left;white-space:nowrap;}
+  .grid-table td{padding:8px 14px;border-bottom:1px solid rgba(48,54,61,.4);vertical-align:middle;line-height:1.3;}
+  .grid-table tr:last-child td{border-bottom:none;}
+  .ch-col{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;color:var(--accent2);width:52px;min-width:52px;white-space:nowrap;}
+  .val-col{font-family:'Share Tech Mono',monospace;font-size:16px;color:var(--text);word-break:break-word;}
 
-/* ALL CLEAR */
-#allClearOverlay{position:fixed;inset:0;background:rgba(0,10,5,0.93);z-index:600;display:none;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;}
-#allClearOverlay.show{display:flex;}
-.big-emoji{font-size:4rem;margin-bottom:20px;animation:bounce 0.6s infinite alternate;}
-@keyframes bounce{from{transform:translateY(0);}to{transform:translateY(-12px);}}
-#allClearOverlay h2{font-family:'Press Start 2P',monospace;font-size:clamp(1rem,5vw,1.6rem);color:var(--neon-green);text-shadow:0 0 20px var(--neon-green),0 0 50px rgba(0,255,136,0.4);margin-bottom:16px;letter-spacing:2px;line-height:1.6;}
-#allClearOverlay p{font-size:0.8rem;color:var(--text-dim);margin-bottom:32px;letter-spacing:1px;line-height:1.8;max-width:300px;}
-#allClearDismiss{background:linear-gradient(180deg,#00b865,#005e33);border:none;color:white;font-family:'Orbitron',sans-serif;font-size:0.8rem;font-weight:700;padding:18px 32px;border-radius:8px;cursor:pointer;box-shadow:0 5px 0 #003d21;letter-spacing:1px;transition:transform 0.1s,box-shadow 0.1s;}
-#allClearDismiss:active{transform:translateY(4px);box-shadow:0 1px 0 #003d21;}
+  /* EDITABLE CELL */
+  .cell-input{font-family:'Share Tech Mono',monospace;font-size:16px;color:var(--text);background:transparent;border:none;outline:none;width:100%;cursor:default;line-height:1.3;}
+  .edit-mode .cell-input{cursor:text;border-bottom:1.5px dashed rgba(26,127,191,.5);background:transparent;border-radius:0;}
+  .edit-mode .cell-input:focus{border-bottom:1.5px solid var(--edit-border);background:rgba(26,127,191,.1);border-radius:3px 3px 0 0;padding:0 3px;}
 
-/* FLASH */
-#flashOverlay{position:fixed;inset:0;background:rgba(0,255,136,0.15);pointer-events:none;opacity:0;z-index:200;transition:opacity 0.3s;}
-#flashOverlay.flash{opacity:1;}
+  /* ROW ACTIONS (edit mode) */
+  .row-del{display:none;width:32px;min-width:32px;text-align:center;}
+  .edit-mode .row-del{display:table-cell;}
+  .del-btn{background:transparent;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px;border-radius:4px;line-height:1;}
+  .del-btn:hover{color:var(--red);}
 
-#page{padding-bottom:40px;}
+  mark{background:rgba(240,165,0,.3);color:#ffd370;border-radius:2px;padding:0 1px;}
+  .current-match mark{background:rgba(224,92,26,.55);color:#fff;outline:1.5px solid var(--accent);border-radius:2px;}
+
+  /* ADD ZONE */
+  #addZoneBtn{margin-top:6px;width:100%;border:1.5px dashed var(--border);background:transparent;color:var(--muted);font-family:'Barlow Condensed',sans-serif;font-size:15px;font-weight:600;padding:12px;border-radius:8px;cursor:pointer;display:none;letter-spacing:.5px;transition:all .15s;}
+  #addZoneBtn:hover{border-color:var(--green);color:var(--green);}
+  .edit-mode-wrap #addZoneBtn{display:block;}
+
+  @media(min-width:640px){
+    .cell-input,.val-col{font-size:14px;}
+    .acc-title{font-size:18px;}
+    .acc-sub{font-size:11px;}
+    main{padding:16px;}
+    .acc-header{min-height:56px;padding:12px 16px;}
+    .grid-table td{padding:8px 16px;}
+  }
 </style>
 </head>
 <body>
+<header>
+  <div class="header-top">
+    <div class="badge">🔴 FBF</div>
+    <div>
+      <h1>FAIRBORN FIRE <span>RADIO</span></h1>
+      <div class="subtitle">GMVEMSC · ZONE-FIRST · CH 1–16 PER ZONE</div>
+    </div>
+  </div>
+  <div class="search-row">
+    <input type="text" id="searchInput" placeholder="Search zone, call sign…" autocomplete="off" spellcheck="false" autocorrect="off" autocapitalize="none">
+    <button class="nav-btn" id="prevBtn" disabled>▲</button>
+    <button class="nav-btn" id="nextBtn" disabled>▼</button>
+    <button class="clear-btn" id="clearBtn">✕</button>
+    <div id="matchCount"></div>
+  </div>
+  <div class="tools-row">
+    <button class="tool-btn" id="expandAll">Expand All</button>
+    <button class="tool-btn" id="collapseAll">Collapse All</button>
+    <button class="tool-btn" id="editToggle">✏️ Edit</button>
+    <button class="tool-btn export" id="exportBtn">⬇ Export</button>
+    <button class="tool-btn import-btn" id="importBtn">⬆ Import</button>
+    <input type="file" id="importFile" accept=".json">
+  </div>
+  <div class="edit-banner" id="editBanner">EDIT MODE · Tap any call sign, zone label, or subtitle to change it · Changes save automatically</div>
+</header>
 
-<div class="corner corner-tl"></div>
-<div class="corner corner-tr"></div>
-<div id="flashOverlay"></div>
-<div id="toast"></div>
-
-<div id="allClearOverlay">
-  <div class="big-emoji">🏆</div>
-  <h2>ALL CLEAR!</h2>
-  <p id="allClearMsg"></p>
-  <button id="allClearDismiss" onclick="dismissAllClear()">KEEP CRUSHING IT</button>
+<div class="modal-overlay" id="disclaimerModal">
+  <div class="modal">
+    <h2>⚠️ OPERATIONAL DISCLAIMER</h2>
+    <p>This tool is a <strong>quick-reference aid only</strong> and is not a substitute for official dispatch systems, CAD, or department-issued radio programming.</p>
+    <div class="warn">· Always verify frequencies with your dispatch center<br>· Channel assignments may change without notice<br>· Do not rely solely on this app during active incidents<br>· Export your data regularly to prevent loss<br>· localStorage is browser-specific — use Export/Import to sync across devices</div>
+    <p style="font-size:13px;color:var(--muted);margin-top:8px;">Shown once. Tap Continue to proceed.</p>
+    <div class="modal-btns" style="margin-top:14px;"><button class="modal-btn confirm" id="disclaimerOk">Continue</button></div>
+  </div>
 </div>
 
-<div id="page">
-  <div id="header"><h1>BUTTONS</h1></div>
-  <div class="header-line"></div>
-
-  <div id="streakBar">
-    <div id="streakLabel">🔥 0 days</div>
-    <div id="streakTrack"><div id="streakFill"></div></div>
+<div class="modal-overlay" id="importModal">
+  <div class="modal">
+    <h2>⬆ Import Data</h2>
+    <p>This will <strong>replace all current data</strong> with the imported file. Your existing edits will be overwritten.</p>
+    <div class="warn">Export a backup first if you want to keep your current data.</div>
+    <div class="modal-btns" style="margin-top:14px;">
+      <button class="modal-btn confirm" id="importConfirm">Replace &amp; Import</button>
+      <button class="modal-btn cancel" id="importCancel">Cancel</button>
+    </div>
   </div>
+</div>
 
-  <div id="taskContainer"></div>
-
-  <button id="clearDoneBtn" onclick="clearDoneClick()">✕ CLEAR DONE</button>
-
-  <div id="addBar">
-    <input id="newTaskInput" placeholder="New button…" onkeydown="if(event.key==='Enter')addTask()">
-    <button id="addBtn" onclick="addTask()">+ ADD</button>
-  </div>
+<div id="mainWrap">
+  <main id="main"></main>
+  <button id="addZoneBtn">＋ Add New Zone</button>
 </div>
 
 <script>
-/* ── DATA ── */
-function loadData() {
+const STORAGE_KEY = 'fbf_radio_v1';
+
+const DEFAULT_ZONES = [
+  {key:"MONT_HOSP", label:"MONT HOSP",    sub:"Montgomery Hospital Zone",       color:"#56d364"},
+  {key:"MONT_40",   label:"MONT CO 40",   sub:"Montgomery County 40",           color:"#56d364"},
+  {key:"MONT_60",   label:"MONT CO 60",   sub:"Montgomery County 60",           color:"#3fb950"},
+  {key:"MONT_70",   label:"MONT CO 70",   sub:"Montgomery County 70",           color:"#3fb950"},
+  {key:"MONT_80",   label:"MONT CO 80",   sub:"Montgomery County 80",           color:"#2ea043"},
+  {key:"MONT_90",   label:"MONT CO 90",   sub:"Montgomery County 90",           color:"#2ea043"},
+  {key:"MONT_CW",   label:"MONT CO CW",   sub:"Montgomery County CW",           color:"#26813a"},
+  {key:"SW1",       label:"SW MUT AID 1", sub:"Southwest Mutual Aid 1",         color:"#388bfd"},
+  {key:"SW2",       label:"SW MUT AID 2", sub:"Southwest Mutual Aid 2",         color:"#1a7fbf"},
+  {key:"XEMA",      label:"LCL XEMA",     sub:"Local XEMA",                     color:"#0969da"},
+  {key:"FBF1",      label:"FBF 1",        sub:"Fairborn Fire Band 1",           color:"#e05c1a"},
+  {key:"FBF2",      label:"FBF 2",        sub:"Fairborn Fire Band 2",           color:"#f0a500"},
+  {key:"FBF3",      label:"FBF 3",        sub:"Fairborn Fire Band 3",           color:"#8957e5"},
+  {key:"GFWEST",    label:"GF WEST",      sub:"Greene/Fairborn West",           color:"#1a7fbf"},
+  {key:"GFEAST",    label:"GF EAST",      sub:"Greene/Fairborn East",           color:"#2ea043"},
+  {key:"R3HOSP",    label:"R3 HOSP",      sub:"Region 3 Hospital",              color:"#da3633"},
+  {key:"XHOS1",     label:"LCL XHOS1",    sub:"Local Cross-Hospital 1",         color:"#6e7681"},
+  {key:"XHOS2",     label:"LCL XHOS2",    sub:"Local Cross-Hospital 2",         color:"#57606a"},
+  {key:"XSO",       label:"LCL XSO",      sub:"Local Cross-Sheriff / Other",    color:"#bc8cff"},
+  {key:"XCLARK1",   label:"XCLARK F1",    sub:"Clark County Fire 1",            color:"#ffa28b"},
+  {key:"XCLARK2",   label:"XCLARK F2",    sub:"Clark County Fire 2",            color:"#ff8c69"},
+];
+
+const DEFAULT_DATA = {
+  // Image left panel — MONT HOSP col: Ch1-16 reading down
+  MONT_HOSP:["29FBFBDIS","57CMH","57GSH","57GSH N","57GVH","57HHER","57KMC","57MVH","57MVHS","57SMC","57SMC","29FBFBDIS","57HHFFDIS","29WSUDIS","29SODIS","8TAC93D FD"],
+  // MONT CO 40: Ch1=29FBFBDIS, Ch2=57HHFDISP, Ch3=57OPS43, Ch4=57OPS44, Ch5=57OPS45... Ch9=57OPS49
+  MONT_40:  ["29FBFBDIS","57HHFDISP","57OPS43","57OPS44","57OPS45","57OPS46","57OPS47","57OPS48","57OPS49","57MEDIC4A","57MEDIC4B","57HHFFDIS","57HHFDISP","57OPS44","57OPS45","8TAC93D FD"],
+  // MONT CO 60: Ch3=57OPS63, Ch4=57OPS64... sequential
+  MONT_60:  ["29FBFBDIS","57OPS62","57OPS63","57OPS64","57OPS65","57OPS65","57OPS66","57OPS67","57OPS68","57MEDIC6C","57MEDIC6B","HSR6-MCI","57HHFDDISP","HSR6-MCI","57OPS45","8TAC93D FD"],
+  // MONT CO 70
+  MONT_70:  ["29FBFBDIS","57OPS72","57OPS73","57OPS74","57OPS75","57OPS76","57OPS77","57OPS77","57OPS78","57MEDIC7C","57MEDIC7B","8TAC92D","8TAC93D","WPF TAC1","WPAFB","29FBFDIS"],
+  // MONT CO 80
+  MONT_80:  ["29FBFBDIS","57RDCFIRE2","57OPS83","57OPS84","57OPS85","57OPS86","57OPS86","57OPS87","57OPS88","57OPS8A","57OPS8B","8TAC93D FD","8TAC93D FD","29FTAC23","29FTAC24","8TAC93D FD"],
+  // MONT CO 90
+  MONT_90:  ["29FBFBDIS","57OPS92","57OPS93","57OPS94","57OPS95","57OPS95","57OPS96","57OPS97","57OPS98","57OPS9A","57OPS9B","8TAC92D A1","HSR3 ED3","HSR6 MCI","8TAC92D A1","8TAC93D FD"],
+  // MONT CO CW: Ch2=57CW1, Ch3=57CW2, Ch4=57CW2, Ch5=57CW2, Ch6=58CW2, Ch7=58CW1, Ch8=59CW1, Ch9=59CW2, Ch10=57LE2, Ch11=57LE3, Ch12=57RDCFIRE2, Ch13=57RDCHELP, Ch14=57SOJAIL, Ch15=57 ARC, Ch16=57RT ASUPV
+  MONT_CW:  ["29FBFBDIS","57CW1","57CW2","57CW2","57CW2","58 CW 2","58 CW 1","59 CW 1","59 CW 2","57LE2","57LE3","57RDCFIRE2","57RDCHELP","57SOJAIL","57 ARC","57RT ASUPV"],
+  SW1:      ["SWMATAC1 WARREN CO.","SWMATAC1 WARREN CO.","SWMATAC2 WARREN CO.","SWMATAC3 GREENE CO.","SWMATAC4 GREENE CO.","SWMATAC5 CLINTON CO.","SWMATAC6 CLERMONT","SWMATAC7 CLERMONT","SWMATAC8 CLERMONT CO.","SWMATAC9 HAMILTON CO.","SWMATAC10 HAMILTON CO.","SWMATAC11 BUTLER CO.","SWMATAC12 BUTLER CO.","SWMATAC13 MONTGOMERY CO.","SWMATAC14 MONTGOMERY CO.","SWMATAC14 MONTGOMERY CO."],
+  SW2:      ["SWMATAC15","SWMATAC15","SWMATAC15","SWMATAC15","SWMATAC16","SWMATAC16","SWMATAC16","SWMATAC16","SWMATAC16","SWMATAC16","SWMATAC17","SWMATAC17","SWMATAC17","SWMAYDAY3","SWMAYDAY2","SWMAYDAY2"],
+  XEMA:     ["XCOEMA29","XCOEMA29","XCOEMA29","XCOEMA57","XCOEMA57","XCOEMA57","XCOEMAS7","XCOEMASS","XCOEMA14","XCOEMA14","XCOEMA14","XCOEMA09","XCOEMA09","XCOEMASS","XCOEMASS","XCOEMA28"],
+  // FBF1: right panel — Ch1=29FBFBDIS, Ch2=29FTAC1...Ch7=29FTAC6, Ch8=29FBFROP2, Ch9=29FBFROP1, Ch10=29XCFDIS, Ch11=29GFRDIS, Ch12=12RDC FIRE, Ch13=29FBPDIS, Ch14=29FBPDIS, Ch15=29FBPDIS, Ch16=8TAC93D FD
+  FBF1:     ["29FBFBDIS","29FTAC1","29FTAC2","29FTAC3","29FTAC4","29FTAC5","29FTAC6","29FBFROP2","29FBFROP1","29XCFDIS","29GFRDIS","12RDC FIRE","29FBPDIS","29FBPDIS","29FBPDIS","8TAC93D FD"],
+  // FBF2: Ch1=29FBFBDIS, Ch2=29FTAC1...Ch6=29FTAC5, Ch7=29TAC11(image shows 29FTAC11?), Ch8=29TAC12, Ch9=29TAC13, Ch10=12FDTC14, Ch11=12FDTC16, Ch12=8TAC93D(or 570PS44?), Ch13=570PS43, Ch14=570PS42, Ch15=8TAC93D, Ch16=8TAC93D
+  FBF2:     ["29FBFBDIS","29FTAC1","29FTAC2","29FTAC3","29FTAC4","29FTAC5","29TAC11","29TAC12","29TAC13","12FDTC14","12FDTC16","8TAC93D FD","57OPS43","57OPS42","8TAC93D","8TAC93D"],
+  // FBF3: Ch1=29FBFBDIS, Ch2=29SOIN, Ch3=11 MERCY, Ch4=57 CMC, Ch5=57 MVH S, Ch6=57 KMC, Ch7=57 GVH, Ch8=57 CMC, Ch9=29 WPMC, Ch10=29 WPMC, Ch11=NEW BVK ED, Ch12=8TAC92D, Ch13=8TAC94D, Ch14=8TAC94D, Ch15=8TAC93D FD, Ch16=8TAC93D FD
+  FBF3:     ["29FBFBDIS","29 SOIN","11 MERCY","57 CMC","57 MVH S","57 KMC","57 GVH","57 CMC","29 WPMC","29 WPMC","NEW BVK ED","8TAC92D","8TAC94D","8TAC94D","8TAC93D FD","8TAC93D FD"],
+  // GF WEST: Ch1=29FBFDIS, Ch2-7=29FTAC1-6, Ch8=29FTAC7, Ch9=29FTAC8, Ch10=29FTAC8, Ch11=29BVFEDIS, Ch12=29GFWDIS, Ch13=29FBFDIS, Ch14=WPAFB, Ch15=29FBFDIS, Ch16=29FBFDIS
+  GFWEST:   ["29FBFDIS","29FTAC1","29FTAC2","29FTAC3","29FTAC4","29FTAC5","29FTAC6","29FTAC7","29FTAC8","29FTAC8","29BVFEDIS","29GFWDIS","29FBFDIS","WPAFB","29FBFDIS","29FBFDIS"],
+  // GF EAST: Ch1=29FBFDIS, Ch2=29FTAC1, Ch3=29FTAC2, Ch4=29FTAC4(skip 3), Ch5=29FTAC5...Ch9=29FTAC9, Ch10=29FTAC16, Ch11=29XCFDIS, Ch12=29XCFDIS, Ch13=29FTAC21, Ch14=29FTAC22, Ch15=29FTAC22, Ch16=29FBFDIS
+  GFEAST:   ["29FBFDIS","29FTAC1","29FTAC2","29FTAC4","29FTAC5","29FTAC6","29FTAC7","29FTAC8","29FTAC9","29FTAC16","29XCFDIS","29XCFDIS","29FTAC21","29FTAC22","29FTAC22","29FBFDIS"],
+  // R3 HOSP: Ch2=29GMH (not 296MH), rest correct
+  R3HOSP:   ["29FBFDIS","29GMH","29SOIN","29WPMC","83KEC FS","19WAYNE","12SRMC","55UVMC","11MERCY","68PREB","09ATRIUM","HSR3 ED3","HSR3 MCI","HSR3 MCI","8TAC92D A1","8TAC93D FD"],
+  XHOS1:    ["XHOS2902 Dis","XHOS2901 GMH","XHOS0903 Atrium Med Ctr","XHOS2501 Natnwd Childrns","XHOS1201 SRMC","XHOS1101 Mercy MmrI","XHOS4901 Madison Co H","XHOS5702 Good Sam","XHOS5703 Grandview","XHOS5704 Ketterin","XHOS5705 Miami Valley","XHOS5706 Southview","XHOS5707 Sycamore","XHOS5708 Day Childrns","XHOS5501 Upper Valley","XHOSWCEN"],
+  XHOS2:    ["29FBFDIS","XHOS CEN","XHOS CEN","XHOS2504 Grant Medical","XHOS2504 Grant Medical","XHOS2509 Mt Carmel West","XHOS2510 Rvrside Mthdst","XHOS2511 OSU Hospital","XHOS3102 Cincy Childrns","XHOS3110 University Hosp","XBLANK","XBLANK","XBLANK","XBLANK","XBLANK","XBLANK"],
+  XSO:      ["XSO-29","XSO-57","XSO-55","XSO-12","XSO-49","XSO-24","XSO-14","XSO-83","XSO-19","XSO-68","XSO-68","XSO-CEN","XSO-NW","XSO-NE","XSO-SE","XSO-SW"],
+  // XCLARK F1: Ch1=12FDDIS1, Ch2=12FDDIS2, Ch3=12FDTAC13, Ch4=12FDTAC14, Ch5=12FDTAC15, Ch6=12FDTAC16, Ch7=7FIRE3D, Ch8=8TAC93D, Ch9=8TAC93D, Ch10=8TAC93D, Ch11=8TAC93D, Ch12=12SODI SP, Ch13=8TAC93D, Ch14=12CWTA C1, Ch15=XCOEMA12, Ch16=12FDDIS1
+  XCLARK1:  ["12FDDIS1","12FDDIS2","12FDTAC13","12FDTAC14","12FDTAC15","12FDTAC16","7FIRE3D","8TAC93D","8TAC93D","8TAC93D","8TAC93D","12SODIS P","8TAC93D","12CWTA C1","XCOEMA12","12FDDIS1"],
+  // XCLARK F2: Ch1=12FDDIS1, Ch2=12FDDIS2, Ch3-5=7TAC3D, Ch6=7TAC3C1D, Ch7=7TAC3C2D, Ch8=7TAC3D, Ch9=7TAC4D, Ch10=7TAC5D, Ch11=7TAC5D, Ch12=7TAC6D, Ch13=8TAC92, Ch14=8TAC93, Ch15=8TAC94, Ch16=8TAC93D
+  XCLARK2:  ["12FDDIS1","12FDDIS2","7TAC3D","7TAC3D","7TAC3D","7TAC3C1D","7TAC3C2D","7TAC3D","7TAC4D","7TAC5D","7TAC5D","7TAC6D","8TAC92","8TAC93","8TAC94","8TAC93D"],
+};
+
+// ── STATE ────────────────────────────────────────
+let state = loadState();
+let editMode = false;
+
+function loadState() {
   try {
-    const v2 = localStorage.getItem("buttons_v2");
-    if (v2) return JSON.parse(v2);
-    const v1 = localStorage.getItem("buttons_v1");
-    if (v1) { const o = JSON.parse(v1); return { tasks: o.tasks||[], streak:0, lastDate:"" }; }
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return JSON.parse(saved);
   } catch(e) {}
-  return { tasks:[], streak:0, lastDate:"" };
-}
-let data = loadData();
-function save() { localStorage.setItem("buttons_v2", JSON.stringify(data)); }
-
-/* ── STREAK ── */
-function todayStr() { return new Date().toLocaleDateString("en-CA"); }
-
-function updateStreakUI() {
-  const s = data.streak || 0;
-  document.getElementById("streakLabel").textContent = "🔥 " + s + " day" + (s===1?"":"s");
-  document.getElementById("streakFill").style.width = Math.min(100,(s/30)*100) + "%";
+  // Deep clone defaults
+  return {
+    zones: JSON.parse(JSON.stringify(DEFAULT_ZONES)),
+    data:  JSON.parse(JSON.stringify(DEFAULT_DATA)),
+  };
 }
 
-function bumpStreak() {
-  const today = todayStr();
-  const yesterday = new Date(Date.now()-86400000).toLocaleDateString("en-CA");
-  if (data.lastDate === today) return;
-  data.streak = (data.lastDate === yesterday) ? (data.streak||0)+1 : 1;
-  data.lastDate = today;
-  save(); updateStreakUI();
+function save() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch(e) {}
 }
 
-/* ── MESSAGES ── */
-const TASK_MSGS = [
-  "BOOM. Button pressed. 💥","Look at you go! 🚀","That one didn't stand a chance.",
-  "DESTROYED IT. 🔥","Button obliterated. Nice work.",
-  "They said it couldn't be done. They were wrong.",
-  "One small tap for you, one giant leap. 🌕","Your future self says thanks.",
-  "Scientists confirm: that was impressive.","Achievement unlocked: Got stuff done. 🏅",
-  "You absolute machine. 🤖","That button never saw it coming.",
-  "Task terminated. Proceed. ⚡","Productivity level: dangerous.",
-  "I'm not crying, you're crying. 😭"
-];
-const ALL_CLEAR_MSGS = [
-  "Every single button pressed. You are a legend. Go touch grass. 🌿",
-  "Zero buttons remaining. Maximum productivity achieved. The simulation is impressed. 🤖",
-  "You cleared the board. Firefighter. Author. Baseball coach. Button destroyer. 💪",
-  "FLAWLESS VICTORY. All tasks annihilated. You may now eat a snack.",
-  "List: defeated. You: victorious. The buttons never had a chance. 🏆"
-];
-
-let toastTimer = null;
-function showToast(msg) {
-  const el = document.getElementById("toast");
-  clearTimeout(toastTimer);
-  el.textContent = msg;
-  el.classList.add("show");
-  toastTimer = setTimeout(()=>el.classList.remove("show"), 2800);
+function uniqueKey(base) {
+  let k = base.replace(/\s+/g,'_').toUpperCase();
+  let n = 2;
+  while (state.zones.find(z => z.key === k)) k = base.replace(/\s+/g,'_').toUpperCase() + '_' + (n++);
+  return k;
 }
 
-function checkAllClear() {
-  if (!data.tasks.length) return;
-  if (!data.tasks.every(t=>t.done)) return;
-  setTimeout(()=>{
-    document.getElementById("allClearMsg").textContent =
-      ALL_CLEAR_MSGS[Math.floor(Math.random()*ALL_CLEAR_MSGS.length)];
-    document.getElementById("allClearOverlay").classList.add("show");
-  }, 600);
-}
-function dismissAllClear() {
-  document.getElementById("allClearOverlay").classList.remove("show");
-}
+// ── HELPERS ──────────────────────────────────────
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function escRe(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
+function hl(t,q){const e=esc(t);if(!q)return e;return e.replace(new RegExp('('+escRe(q)+')','gi'),'<mark>$1</mark>');}
+function hits(t,q){if(!q)return 0;return(t.match(new RegExp(escRe(q),'gi'))||[]).length;}
 
-/* ── DRAG TO REORDER ── */
-let dragSrcIdx=null, dragStartY=0, dragRows=[];
+// ── RENDER ───────────────────────────────────────
+const mainEl = document.getElementById('main');
+const mainWrap = document.getElementById('mainWrap');
 
-function buildDragHandle(i) {
-  const h = document.createElement("div");
-  h.className = "dragHandle";
-  h.innerHTML = "&#9776;";
+function render(query) {
+  mainEl.innerHTML = '';
+  const q = (query||'').trim().toLowerCase();
+  let total = 0;
 
-  function onStart(clientY) {
-    dragSrcIdx=i; dragStartY=clientY;
-    dragRows=Array.from(document.querySelectorAll("#taskContainer .taskRow"));
-    dragRows[i].classList.add("dragging");
-    document.body.style.userSelect="none";
-  }
-  function onMove(clientY) {
-    if (dragSrcIdx===null) return;
-    const rowH=(dragRows[0]?.getBoundingClientRect().height||64)+10;
-    const newIdx=Math.max(0,Math.min(dragRows.length-1,dragSrcIdx+Math.round((clientY-dragStartY)/rowH)));
-    dragRows.forEach(r=>r.classList.remove("drag-over"));
-    if (newIdx!==dragSrcIdx && dragRows[newIdx]) dragRows[newIdx].classList.add("drag-over");
-  }
-  function onEnd(clientY) {
-    if (dragSrcIdx===null) return;
-    const rowH=(dragRows[0]?.getBoundingClientRect().height||64)+10;
-    const pendingIdxs=data.tasks.map((t,idx)=>t.done?null:idx).filter(x=>x!==null);
-    const srcPos=pendingIdxs.indexOf(dragSrcIdx);
-    if (srcPos!==-1) {
-      const tgtPos=Math.max(0,Math.min(pendingIdxs.length-1,srcPos+Math.round((clientY-dragStartY)/rowH)));
-      const tgtIdx=pendingIdxs[tgtPos];
-      if (tgtIdx!==dragSrcIdx && tgtIdx!==undefined) {
-        const moved=data.tasks.splice(dragSrcIdx,1)[0];
-        data.tasks.splice(tgtIdx,0,moved);
-        save();
-      }
-    }
-    dragRows.forEach(r=>{ r.classList.remove("dragging"); r.classList.remove("drag-over"); });
-    dragSrcIdx=null; document.body.style.userSelect="";
-    render();
-  }
+  state.zones.forEach((zone, zi) => {
+    const vals = state.data[zone.key] || [];
+    const allText = (vals.join(' ') + ' ' + zone.label + ' ' + zone.sub).toLowerCase();
+    const n = q ? hits(allText, q) : 0;
+    total += n;
 
-  h.addEventListener("touchstart",e=>{ e.preventDefault(); onStart(e.touches[0].clientY); },{passive:false});
-  h.addEventListener("touchmove", e=>{ e.preventDefault(); onMove(e.touches[0].clientY); },{passive:false});
-  h.addEventListener("touchend",  e=>{ onEnd(e.changedTouches[0].clientY); },{passive:true});
-  h.addEventListener("mousedown", e=>{
-    onStart(e.clientY);
-    const mm=e2=>onMove(e2.clientY);
-    const mu=e2=>{ onEnd(e2.clientY); window.removeEventListener("mousemove",mm); window.removeEventListener("mouseup",mu); };
-    window.addEventListener("mousemove",mm);
-    window.addEventListener("mouseup",mu);
+    const div = document.createElement('div');
+    div.className = 'accordion' + (q && n > 0 ? ' has-match' : '');
+    div.dataset.zkey = zone.key;
+
+    // rows
+    const rowsHtml = vals.map((v, ci) => `
+      <tr data-ci="${ci}">
+        <td class="ch-col">CH&nbsp;${ci+1}</td>
+        <td class="val-col">
+          <input class="cell-input" type="text" value="${esc(v)}"
+            data-zkey="${esc(zone.key)}" data-ci="${ci}"
+            readonly spellcheck="false" autocorrect="off" autocapitalize="none"
+            aria-label="Channel ${ci+1} call sign">
+        </td>
+        <td class="row-del">
+          <button class="del-btn" title="Remove channel" onclick="delChannel('${esc(zone.key)}',${ci})">✕</button>
+        </td>
+      </tr>`).join('');
+
+    div.innerHTML = `
+      <div class="acc-header" onclick="headerClick(event,this)">
+        <span class="zone-stripe" style="background:${zone.color}"></span>
+        <div class="acc-title-wrap">
+          <div class="acc-title">
+            <input class="editable-label" type="text" value="${esc(zone.label)}"
+              data-zkey="${esc(zone.key)}" data-field="label"
+              readonly spellcheck="false" autocorrect="off" autocapitalize="characters"
+              aria-label="Zone label">
+          </div>
+          <div class="acc-sub">
+            <input class="editable-label" type="text" value="${esc(zone.sub)}"
+              data-zkey="${esc(zone.key)}" data-field="sub"
+              readonly spellcheck="false" autocorrect="off"
+              aria-label="Zone subtitle">
+          </div>
+        </div>
+        <span class="match-pill">${n} match${n!==1?'es':''}</span>
+        <span class="chevron">▼</span>
+      </div>
+      <div class="zone-actions">
+        <button class="zact-btn add" onclick="addChannel('${esc(zone.key)}')">＋ Add Channel</button>
+        <button class="zact-btn danger" onclick="deleteZone('${esc(zone.key)}')">🗑 Delete Zone</button>
+      </div>
+      <div class="acc-body">
+        <table class="grid-table">
+          <thead><tr>
+            <th>CH</th><th>CALL SIGN / ASSIGNMENT</th>
+            <th class="row-del" style="width:32px"></th>
+          </tr></thead>
+          <tbody>${rowsHtml}</tbody>
+        </table>
+      </div>`;
+
+    mainEl.appendChild(div);
   });
-  return h;
-}
 
-/* ── RENDER ── */
-function render() {
-  updateStreakUI();
-  const container=document.getElementById("taskContainer");
-  container.innerHTML="";
-
-  const hasDone=data.tasks.some(t=>t.done);
-  const clearBtn=document.getElementById("clearDoneBtn");
-  clearBtn.classList.toggle("visible",hasDone);
-  if (!hasDone && clearDoneArmed) {
-    clearTimeout(clearDoneTimer);
-    clearDoneArmed=false;
-    clearBtn.classList.remove("armed");
-    clearBtn.textContent="✕ CLEAR DONE";
+  if (q) {
+    document.querySelectorAll('.accordion.has-match').forEach(a => a.classList.add('open'));
+    document.querySelectorAll('.accordion:not(.has-match)').forEach(a => a.classList.remove('open'));
   }
 
-  data.tasks.forEach((task,i)=>{
-    const row=document.createElement("div");
-    row.className="taskRow";
+  // Apply edit mode classes
+  applyEditMode();
+  bindCellInputs();
 
-    // drag handle (pending only) or spacer
-    if (!task.done) {
-      row.appendChild(buildDragHandle(i));
-    } else {
-      const sp=document.createElement("div");
-      sp.className="dragSpacer";
-      row.appendChild(sp);
-    }
-
-    // main button
-    const btn=document.createElement("button");
-    btn.className="taskButton "+(task.done?"done":"pending");
-    btn.textContent=task.done?"✔ "+task.text:task.text;
-    btn.onclick=()=>toggleTask(i);
-    row.appendChild(btn);
-
-    // delete (two-tap armed)
-    const del=document.createElement("button");
-    del.className="deleteBtn";
-    del.innerHTML="✕";
-    del.dataset.armed="false";
-
-    function disarm() {
-      clearTimeout(del._t); del._t=null;
-      del.dataset.armed="false"; del.innerHTML="✕";
-      del.style.borderColor=""; del.style.color=""; del.style.boxShadow="";
-    }
-    del.onclick=e=>{
-      e.stopPropagation();
-      if (del.dataset.armed==="true") {
-        clearTimeout(del._t); removeTask(i);
-      } else {
-        del.dataset.armed="true"; del.innerHTML="✓";
-        del.style.borderColor="var(--neon-red)";
-        del.style.color="var(--neon-red)";
-        del.style.boxShadow="0 4px 0 #0a0008,0 0 12px rgba(255,50,80,0.5)";
-        del._t=setTimeout(disarm,3000);
-      }
-    };
-    row.appendChild(del);
-    container.appendChild(row);
-  });
+  const mc = document.getElementById('matchCount');
+  mc.textContent = q ? (total===0 ? 'No matches' : `${total} match${total!==1?'es':''}`) : '';
 }
 
-/* ── ACTIONS ── */
-function addTask() {
-  const input=document.getElementById("newTaskInput");
-  const text=input.value.trim().toUpperCase();
-  if (!text) return;
-  data.tasks.push({text,done:false});
-  input.value=""; save(); render();
-}
-
-function toggleTask(i) {
-  const task=data.tasks[i];
-  const wasDone=task.done;
-  task.done=!task.done;
-  if (!wasDone && task.done) {
-    const done=data.tasks.splice(i,1)[0];
-    data.tasks.push(done);
-    const ov=document.getElementById("flashOverlay");
-    ov.classList.add("flash");
-    setTimeout(()=>ov.classList.remove("flash"),300);
-    bumpStreak();
-    showToast(TASK_MSGS[Math.floor(Math.random()*TASK_MSGS.length)]);
-  }
-  save(); render();
-  if (!wasDone && task.done) checkAllClear();
-}
-
-function removeTask(i) { data.tasks.splice(i,1); save(); render(); }
-
-let clearDoneArmed=false, clearDoneTimer=null;
-function clearDoneClick() {
-  const btn=document.getElementById("clearDoneBtn");
-  if (clearDoneArmed) {
-    clearTimeout(clearDoneTimer);
-    clearDoneArmed=false;
-    data.tasks=data.tasks.filter(t=>!t.done);
-    save(); render();
+function applyEditMode() {
+  if (editMode) {
+    mainWrap.classList.add('edit-mode-wrap');
+    document.querySelectorAll('.accordion').forEach(a => a.classList.add('edit-mode'));
+    document.querySelectorAll('.editable-label, .cell-input').forEach(i => i.removeAttribute('readonly'));
   } else {
-    clearDoneArmed=true;
-    btn.classList.add("armed");
-    btn.textContent="✓ CONFIRM CLEAR";
-    clearDoneTimer=setTimeout(()=>{
-      clearDoneArmed=false;
-      btn.classList.remove("armed");
-      btn.textContent="✕ CLEAR DONE";
-    },3000);
+    mainWrap.classList.remove('edit-mode-wrap');
+    document.querySelectorAll('.accordion').forEach(a => a.classList.remove('edit-mode'));
+    document.querySelectorAll('.editable-label, .cell-input').forEach(i => i.setAttribute('readonly',''));
   }
 }
 
-/* ── INIT ── */
-render();
+function bindCellInputs() {
+  // Call sign cells
+  document.querySelectorAll('.cell-input').forEach(input => {
+    input.addEventListener('change', e => {
+      const key = e.target.dataset.zkey;
+      const ci = parseInt(e.target.dataset.ci);
+      if (!state.data[key]) return;
+      state.data[key][ci] = e.target.value;
+      save();
+    });
+    // prevent accordion toggle when clicking inside input
+    input.addEventListener('click', e => { if(editMode) e.stopPropagation(); });
+    input.addEventListener('focus', e => { if(editMode) e.stopPropagation(); });
+  });
+
+  // Zone label / sub
+  document.querySelectorAll('.editable-label').forEach(input => {
+    input.addEventListener('change', e => {
+      const key = e.target.dataset.zkey;
+      const field = e.target.dataset.field;
+      const zone = state.zones.find(z => z.key === key);
+      if (!zone) return;
+      zone[field] = e.target.value;
+      save();
+    });
+    input.addEventListener('click', e => { if(editMode) e.stopPropagation(); });
+    input.addEventListener('focus', e => { if(editMode) e.stopPropagation(); });
+  });
+}
+
+// ── ACCORDION ────────────────────────────────────
+function headerClick(e, h) {
+  // Don't toggle if clicking an input in edit mode
+  if (editMode && (e.target.tagName === 'INPUT')) return;
+  h.closest('.accordion').classList.toggle('open');
+}
+
+// ── EDIT ACTIONS ─────────────────────────────────
+function addChannel(key) {
+  if (!state.data[key]) state.data[key] = [];
+  state.data[key].push('NEW ENTRY');
+  save();
+  const q = document.getElementById('searchInput').value.trim();
+  render(q);
+  // Re-open that accordion
+  const acc = document.querySelector(`.accordion[data-zkey="${key}"]`);
+  if (acc) { acc.classList.add('open'); acc.querySelector('.acc-body').scrollIntoView({behavior:'smooth',block:'nearest'}); }
+}
+
+function delChannel(key, ci) {
+  if (!state.data[key]) return;
+  state.data[key].splice(ci, 1);
+  save();
+  render(document.getElementById('searchInput').value.trim());
+  const acc = document.querySelector(`.accordion[data-zkey="${key}"]`);
+  if (acc) acc.classList.add('open');
+}
+
+function deleteZone(key) {
+  if (!confirm(`Delete zone "${state.zones.find(z=>z.key===key)?.label}"? This cannot be undone.`)) return;
+  state.zones = state.zones.filter(z => z.key !== key);
+  delete state.data[key];
+  save();
+  render(document.getElementById('searchInput').value.trim());
+}
+
+document.getElementById('addZoneBtn').addEventListener('click', () => {
+  const label = prompt('Zone label (e.g. CUSTOM ZONE):');
+  if (!label) return;
+  const sub = prompt('Zone subtitle (e.g. Custom description):') || '';
+  const key = uniqueKey(label);
+  const colors = ['#e05c1a','#f0a500','#2ea043','#1a7fbf','#8957e5','#da3633','#56d364','#bc8cff'];
+  const color = colors[state.zones.length % colors.length];
+  state.zones.push({key, label, sub, color});
+  state.data[key] = Array(16).fill('—');
+  save();
+  render(document.getElementById('searchInput').value.trim());
+  setTimeout(() => {
+    const acc = document.querySelector(`.accordion[data-zkey="${key}"]`);
+    if (acc) { acc.classList.add('open'); acc.scrollIntoView({behavior:'smooth',block:'start'}); }
+  }, 50);
+});
+
+// ── EDIT TOGGLE ──────────────────────────────────
+const editToggle = document.getElementById('editToggle');
+const editBanner = document.getElementById('editBanner');
+
+editToggle.addEventListener('click', () => {
+  editMode = !editMode;
+  editToggle.textContent = editMode ? '✅ Done' : '✏️ Edit';
+  editToggle.classList.toggle('edit-active', editMode);
+  editBanner.classList.toggle('show', editMode);
+  applyEditMode();
+  // Expand all in edit mode for convenience
+  if (editMode) document.querySelectorAll('.accordion').forEach(a => a.classList.add('open'));
+});
+
+// ── SEARCH / NAV ─────────────────────────────────
+let marks=[], cur=-1;
+const prevBtn=document.getElementById('prevBtn');
+const nextBtn=document.getElementById('nextBtn');
+function gather(){marks=Array.from(document.querySelectorAll('.accordion.open mark'));cur=marks.length?0:-1;nav();}
+function nav(){prevBtn.disabled=!marks.length||cur<=0;nextBtn.disabled=!marks.length||cur>=marks.length-1;}
+function focusMark(i){
+  document.querySelectorAll('.current-match').forEach(m=>m.classList.remove('current-match'));
+  if(i<0||i>=marks.length)return;
+  cur=i;const m=marks[i];m.classList.add('current-match');
+  const acc=m.closest('.accordion');if(acc&&!acc.classList.contains('open'))acc.classList.add('open');
+  m.scrollIntoView({behavior:'smooth',block:'center'});nav();
+  document.getElementById('matchCount').textContent=`${i+1} / ${marks.length}`;
+}
+prevBtn.addEventListener('click',()=>focusMark(cur-1));
+nextBtn.addEventListener('click',()=>focusMark(cur+1));
+document.getElementById('clearBtn').addEventListener('click',()=>{
+  document.getElementById('searchInput').value='';
+  render('');marks=[];cur=-1;prevBtn.disabled=true;nextBtn.disabled=true;
+  document.getElementById('matchCount').textContent='';
+});
+let tmr;
+document.getElementById('searchInput').addEventListener('input',e=>{
+  clearTimeout(tmr);
+  tmr=setTimeout(()=>{
+    const q=e.target.value.trim();render(q);
+    if(q){setTimeout(()=>{gather();if(marks.length)focusMark(0);},30);}
+    else{marks=[];cur=-1;prevBtn.disabled=true;nextBtn.disabled=true;}
+  },150);
+});
+document.getElementById('searchInput').addEventListener('keydown',e=>{
+  if(e.key==='Enter'){e.shiftKey?focusMark(cur-1):focusMark(cur+1);}
+  if(e.key==='Escape')document.getElementById('clearBtn').click();
+});
+document.getElementById('expandAll').addEventListener('click',()=>document.querySelectorAll('.accordion').forEach(a=>a.classList.add('open')));
+document.getElementById('collapseAll').addEventListener('click',()=>{
+  document.querySelectorAll('.accordion').forEach(a=>a.classList.remove('open'));marks=[];cur=-1;nav();
+});
+
+// ── EXPORT ───────────────────────────────────────
+document.getElementById('exportBtn').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(state, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `fairborn_radio_${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// ── IMPORT ───────────────────────────────────────
+let pendingImportData = null;
+
+document.getElementById('importBtn').addEventListener('click', () => {
+  pendingImportData = null;
+  document.getElementById('importFile').value = '';
+  document.getElementById('importFile').click();
+});
+
+document.getElementById('importFile').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const parsed = JSON.parse(ev.target.result);
+      if (!parsed.zones || !parsed.data) throw new Error('Invalid format');
+      pendingImportData = parsed;
+      document.getElementById('importModal').classList.add('show');
+    } catch(err) {
+      alert('Invalid file. Please select a valid Fairborn Radio export (.json).');
+    }
+  };
+  reader.readAsText(file);
+});
+
+document.getElementById('importConfirm').addEventListener('click', () => {
+  if (!pendingImportData) return;
+  state = pendingImportData;
+  save();
+  document.getElementById('importModal').classList.remove('show');
+  render(document.getElementById('searchInput').value.trim());
+  pendingImportData = null;
+});
+
+document.getElementById('importCancel').addEventListener('click', () => {
+  document.getElementById('importModal').classList.remove('show');
+  pendingImportData = null;
+});
+
+// ── DISCLAIMER (shown once) ───────────────────────
+const DISC_KEY = 'fbf_disclaimer_seen';
+if (!localStorage.getItem(DISC_KEY)) {
+  document.getElementById('disclaimerModal').classList.add('show');
+}
+document.getElementById('disclaimerOk').addEventListener('click', () => {
+  localStorage.setItem(DISC_KEY, '1');
+  document.getElementById('disclaimerModal').classList.remove('show');
+});
+
+render('');
 </script>
 </body>
 </html>
